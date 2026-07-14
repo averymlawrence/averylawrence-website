@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import AppShell from '../layouts/AppShell.astro';
+import ProjectBar from '../components/ProjectBar.astro';
+import UtilityBar from '../components/UtilityBar.astro';
+import Marquee from '../components/Marquee.astro';
+import TagFilterOverlay from '../components/TagFilterOverlay.astro';
+import SearchBox from '../components/SearchBox.astro';
+import { projectColor, GRAY } from '../lib/colors';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const firstFour = projects.filter((p) => p.data.order <= 4);
+const rest = projects.filter((p) => p.data.order > 4);
+---
+
+<AppShell title="averylawrence.com" showToggle={true}>
+	{
+		firstFour.map((project) => (
+			<ProjectBar
+				title={project.data.title}
+				href={`/projects/${project.id}`}
+				color={projectColor(project.data.order, project.data.hue)}
+				tags={project.data.tags}
+				status={project.data.status}
+			/>
+		))
+	}
+
+	<Marquee text="INFO" href="/info" />
+
+	{
+		rest.map((project) => (
+			<ProjectBar
+				title={project.data.title}
+				href={`/projects/${project.id}`}
+				color={projectColor(project.data.order, project.data.hue)}
+				tags={project.data.tags}
+				status={project.data.status}
+			/>
+		))
+	}
+
+	<Marquee text="SHOP" href="/shop" />
+
+	<UtilityBar title="teaching" href="/teaching" color={GRAY.teaching} />
+	<UtilityBar title="resumes/statements/etc." href="/resumes" color={GRAY.resumes} />
+	<UtilityBar title="project management" href="/project-management" color={GRAY.projectManagement} />
+	<UtilityBar title="bloopers" href="/bloopers" color={GRAY.bloopers} />
+
+	<Marquee text="NEWS" href="/news" />
+
+	<SearchBox />
+
+	<TagFilterOverlay slot="overlay" />
+</AppShell>

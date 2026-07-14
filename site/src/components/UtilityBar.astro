@@ -1,0 +1,36 @@
+---
+interface Props {
+	title: string;
+	href: string;
+	color: string;
+}
+const { title, href, color } = Astro.props;
+---
+
+<a href={href} class="utility-bar" style={`background-color: ${color}`}>
+	<span class="utility-bar-title">{title}</span>
+</a>
+
+<style>
+	.utility-bar {
+		flex: none;
+		height: var(--bar-height-desktop);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-decoration: none;
+	}
+
+	.utility-bar-title {
+		font-family: var(--font-heading);
+		font-weight: 800;
+		font-size: 15px;
+		color: var(--color-black);
+	}
+
+	@media (max-width: 600px) {
+		.utility-bar {
+			height: var(--bar-height-mobile);
+		}
+	}
+</style>

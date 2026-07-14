@@ -1,0 +1,55 @@
+---
+import BaseHead from '../layouts/BaseHead.astro';
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title="as requested. love you — averylawrence.com" />
+	</head>
+	<body>
+		<div class="grandmother-page">
+			<a href="/" class="back">‹ back</a>
+			<h1>as requested. love you</h1>
+			<p class="placeholder">(drawings coming soon)</p>
+		</div>
+	</body>
+</html>
+
+<style is:global>
+	html,
+	body {
+		height: 100%;
+	}
+</style>
+
+<style>
+	.grandmother-page {
+		min-height: 100dvh;
+		background: linear-gradient(to bottom, #cfe8f0, #cfe8c9);
+		padding: 24px 20px;
+		box-sizing: border-box;
+		position: relative;
+	}
+
+	.back {
+		font-family: var(--font-body);
+		font-weight: 600;
+		font-size: 12px;
+		color: #222;
+		text-decoration: none;
+	}
+
+	h1 {
+		font-family: var(--font-heading);
+		font-weight: 800;
+		font-size: 24px;
+		color: #222;
+		margin: 40px 0 24px;
+	}
+
+	.placeholder {
+		font-family: var(--font-body);
+		font-size: 14px;
+		color: #444;
+	}
+</style>

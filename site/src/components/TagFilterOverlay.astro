@@ -1,0 +1,106 @@
+---
+const TAGS = ['Performance', 'Animation', 'Video', 'Installation', 'Photo'];
+---
+
+<div id="tag-overlay" class="tag-overlay">
+	<h2 class="tag-overlay-title">filter by tag</h2>
+	<div class="tag-list">
+		{
+			TAGS.map((name) => (
+				<button class="tag-option" data-tag-option={name.toLowerCase()}>
+					{name}
+				</button>
+			))
+		}
+	</div>
+</div>
+
+<style>
+	.tag-overlay {
+		position: absolute;
+		inset: 0;
+		background: var(--color-white);
+		overflow-y: auto;
+		padding: 22px 20px;
+		display: none;
+	}
+
+	.tag-overlay.open {
+		display: block;
+	}
+
+	.tag-overlay-title {
+		text-align: center;
+		font-family: var(--font-heading);
+		font-weight: 800;
+		font-size: 21px;
+		margin: 0 0 20px;
+	}
+
+	.tag-list {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.tag-option {
+		width: 100%;
+		background: var(--color-white);
+		color: var(--color-black);
+		border: 2px solid var(--color-black);
+		border-radius: var(--radius-sm);
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 16px;
+		padding: 16px;
+		cursor: pointer;
+	}
+
+	.tag-option.selected {
+		background: var(--color-black);
+		color: var(--color-white);
+	}
+</style>
+
+<script>
+	function initTagFilter() {
+		const toggleBtn = document.getElementById('tag-toggle');
+		const overlay = document.getElementById('tag-overlay');
+		if (!toggleBtn || !overlay) return;
+
+		const tagButtons = overlay.querySelectorAll<HTMLButtonElement>('[data-tag-option]');
+		const bars = document.querySelectorAll<HTMLElement>('[data-tags]');
+		const selected = new Set<string>();
+
+		function updateBars() {
+			bars.forEach((bar) => {
+				const tags = bar.dataset.tags ? bar.dataset.tags.split(',').filter(Boolean) : [];
+				const show = selected.size === 0 || tags.some((t) => selected.has(t));
+				bar.style.display = show ? '' : 'none';
+			});
+		}
+
+		toggleBtn.addEventListener('click', () => {
+			const isOpen = overlay.classList.toggle('open');
+			toggleBtn.textContent = isOpen ? '×' : '+';
+			toggleBtn.setAttribute('aria-expanded', String(isOpen));
+		});
+
+		tagButtons.forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const tag = btn.dataset.tagOption;
+				if (!tag) return;
+				if (selected.has(tag)) {
+					selected.delete(tag);
+					btn.classList.remove('selected');
+				} else {
+					selected.add(tag);
+					btn.classList.add('selected');
+				}
+				updateBars();
+			});
+		});
+	}
+
+	initTagFilter();
+</script>

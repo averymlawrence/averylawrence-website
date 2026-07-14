@@ -1,0 +1,61 @@
+---
+interface Props {
+	text: string;
+	href?: string;
+}
+const { text, href } = Astro.props;
+const Tag = href ? 'a' : 'div';
+const repeated = Array.from({ length: 6 }, () => text).join(' · ');
+---
+
+<Tag class="aw-marquee-wrap" {...(href ? { href } : {})}>
+	<div class="aw-marquee-track">
+		<span class="aw-marquee-item">{repeated}</span>
+		<span class="aw-marquee-item">{repeated}</span>
+	</div>
+</Tag>
+
+<style>
+	.aw-marquee-wrap {
+		display: flex;
+		overflow: hidden;
+		background: var(--color-black);
+		height: var(--marquee-height-desktop);
+		align-items: center;
+		text-decoration: none;
+	}
+
+	.aw-marquee-track {
+		display: flex;
+		white-space: nowrap;
+		animation: marqueeScroll 9s linear infinite;
+	}
+
+	.aw-marquee-item {
+		font-family: var(--font-heading);
+		font-weight: 800;
+		font-size: 16px;
+		color: var(--color-white);
+		letter-spacing: 1px;
+		padding: 0 18px;
+	}
+
+	@keyframes marqueeScroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-50%);
+		}
+	}
+
+	@media (max-width: 600px) {
+		.aw-marquee-wrap {
+			height: var(--marquee-height-mobile);
+		}
+
+		.aw-marquee-item {
+			font-size: 14px;
+		}
+	}
+</style>

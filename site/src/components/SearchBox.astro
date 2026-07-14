@@ -1,0 +1,129 @@
+<div class="search-block">
+	<input type="search" id="search-input" class="search-input" placeholder="" aria-label="Search" autocomplete="off" />
+	<label for="search-input" class="search-label">SEARCH</label>
+	<div id="search-results" class="search-results"></div>
+</div>
+
+<style>
+	.search-block {
+		background: var(--color-black);
+		padding: 24px 16px 32px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.search-input {
+		width: 100%;
+		max-width: 480px;
+		border: none;
+		border-radius: var(--radius-sm);
+		padding: 12px 14px;
+		font-family: var(--font-body);
+		font-size: 14px;
+		background: var(--color-white);
+		color: var(--color-black);
+	}
+
+	.search-label {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 13px;
+		letter-spacing: 1px;
+		color: var(--color-white);
+	}
+
+	.search-results {
+		width: 100%;
+		max-width: 480px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.search-results :global(.search-result) {
+		display: flex;
+		flex-direction: column;
+		background: var(--color-white);
+		border-radius: var(--radius-sm);
+		padding: 10px 12px;
+		text-decoration: none;
+		gap: 2px;
+	}
+
+	.search-results :global(.search-result-title) {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 14px;
+		color: var(--color-black);
+	}
+
+	.search-results :global(.search-result-excerpt) {
+		font-family: var(--font-body);
+		font-size: 12.5px;
+		color: #444;
+	}
+
+	.search-results :global(.search-note) {
+		font-family: var(--font-body);
+		font-size: 12.5px;
+		color: rgb(255 255 255 / 60%);
+		margin: 0;
+		text-align: center;
+	}
+</style>
+
+<script is:inline>
+	let pagefind;
+
+	async function loadPagefind() {
+		if (pagefind !== undefined) return pagefind;
+		try {
+			pagefind = await import('/pagefind/pagefind.js');
+			await pagefind?.init();
+		} catch {
+			pagefind = null;
+		}
+		return pagefind;
+	}
+
+	const input = document.getElementById('search-input');
+	const results = document.getElementById('search-results');
+	let debounceTimer;
+
+	input?.addEventListener('input', () => {
+		clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(async () => {
+			const term = input.value.trim();
+			if (!results) return;
+			results.innerHTML = '';
+			if (!term) return;
+
+			const pf = await loadPagefind();
+			if (!pf) {
+				results.innerHTML = '<p class="search-note">Search is available on the deployed site.</p>';
+				return;
+			}
+
+			const search = await pf.search(term);
+			const data = await Promise.all(search.results.slice(0, 8).map((r) => r.data()));
+			if (data.length === 0) {
+				results.innerHTML = '<p class="search-note">No results.</p>';
+				return;
+			}
+
+			results.innerHTML = data
+				.map((d) => {
+					const title = (d.meta?.title ?? d.url).replace(/\s*—\s*averylawrence\.com$/, '');
+					return `
+				<a class="search-result" href="${d.url}">
+					<span class="search-result-title">${title}</span>
+					<span class="search-result-excerpt">${d.excerpt}</span>
+				</a>
+			`;
+				})
+				.join('');
+		}, 200);
+	});
+</script>

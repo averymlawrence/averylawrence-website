@@ -1,0 +1,73 @@
+---
+import { Image } from 'astro:assets';
+
+interface ImageEntry {
+	src: ImageMetadata;
+	alt: string;
+	caption: string;
+}
+
+interface Props {
+	body?: string;
+	images: ImageEntry[];
+}
+const { body, images } = Astro.props;
+
+const [hero, ...rest] = images;
+const paragraphs = body ? [body] : rest.map((img) => img.caption);
+---
+
+<div class="split-template">
+	<div class="split-left">
+		{hero && <Image src={hero.src} alt={hero.alt} />}
+		{hero && <p class="caption">{hero.caption}</p>}
+	</div>
+	<div class="split-right">
+		{paragraphs.map((p) => <p>{p}</p>)}
+	</div>
+</div>
+
+<style>
+	.split-template {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		max-width: 1100px;
+		margin: 0 auto;
+	}
+
+	.split-left {
+		padding: 24px;
+		border-right: 1px solid var(--color-black);
+	}
+
+	.split-left :global(img) {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	.caption {
+		font-family: var(--font-body);
+		font-size: 13.5px;
+		color: #333;
+		margin-top: 8px;
+		line-height: 1.5;
+	}
+
+	.split-right {
+		padding: 24px;
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.6;
+	}
+
+	@media (max-width: 600px) {
+		.split-template {
+			grid-template-columns: 1fr;
+		}
+
+		.split-left {
+			border-right: none;
+		}
+	}
+</style>

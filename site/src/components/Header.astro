@@ -1,0 +1,73 @@
+---
+interface Props {
+	showToggle?: boolean;
+}
+const { showToggle = false } = Astro.props;
+---
+
+<header class="site-header">
+	<span></span>
+	<a href="/home" class="wordmark">averylawrence.com</a>
+	{
+		showToggle ? (
+			<button id="tag-toggle" class="toggle-btn" aria-expanded="false" aria-controls="tag-overlay">
+				+
+			</button>
+		) : (
+			<span></span>
+		)
+	}
+</header>
+
+<style>
+	.site-header {
+		flex: none;
+		height: var(--header-height-desktop);
+		background: var(--color-black);
+		display: grid;
+		grid-template-columns: 44px 1fr 44px;
+		align-items: center;
+		padding: 0 16px;
+	}
+
+	.wordmark {
+		text-align: center;
+		font-family: var(--font-heading);
+		font-weight: 800;
+		font-size: 17px;
+		color: var(--color-white);
+		text-decoration: none;
+	}
+
+	.toggle-btn {
+		justify-self: end;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		border: 1.5px solid var(--color-white);
+		background: transparent;
+		color: var(--color-white);
+		font-size: 18px;
+		line-height: 1;
+		cursor: pointer;
+		font-family: var(--font-body);
+		padding: 0;
+	}
+
+	@media (max-width: 600px) {
+		.site-header {
+			height: var(--header-height-mobile);
+			grid-template-columns: 36px 1fr 36px;
+		}
+
+		.wordmark {
+			font-size: 15px;
+		}
+
+		.toggle-btn {
+			width: 28px;
+			height: 28px;
+			font-size: 16px;
+		}
+	}
+</style>

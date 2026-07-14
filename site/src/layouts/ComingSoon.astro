@@ -1,0 +1,25 @@
+---
+import AppShell from './AppShell.astro';
+
+interface Props {
+	title: string;
+	message?: string;
+}
+const { title, message = 'Coming soon.' } = Astro.props;
+---
+
+<AppShell title={`${title} — averylawrence.com`}>
+	<div class="coming-soon">
+		<p>{message}</p>
+	</div>
+</AppShell>
+
+<style>
+	.coming-soon {
+		padding: 80px 16px;
+		text-align: center;
+		font-family: var(--font-body);
+		font-size: 16px;
+		color: #444;
+	}
+</style>

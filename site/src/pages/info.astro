@@ -1,0 +1,66 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+---
+
+<AppShell title="info — averylawrence.com">
+	<div class="info-page">
+		<section>
+			<h2>Bio</h2>
+			<p>
+				Avery Lawrence lives in Ann Arbor, Michigan. He was born and raised in Charlottesville, VA. He
+				has a BA in Visual Studies from The University of Pennsylvania and an MFA in Art from The
+				California Institute of the Arts. Until recently, he managed artist projects at The Fabric
+				Workshop and Museum and taught studio courses at the University of Pennsylvania. Less recently,
+				he worked at a frame shop, drove a pedicab, installed wedding tents, taught afterschool puppet
+				classes, and participated in a number of paid research studies.
+			</p>
+			<p>
+				He has shown his video, performance, and installation work at the Weisman Art Museum
+				(Minneapolis), Weatherspoon Museum of Art (North Carolina), the Museum of Contemporary Art in
+				Jacksonville (Florida), The Orlando Museum of Art (Florida), the Contemporary Art Center in New
+				Orleans (Louisiana), The Ogden Museum of Southern Art (Louisiana), The Peeler Art Center
+				(Indiana), and various galleries, art fairs and film festivals.
+			</p>
+		</section>
+		<section>
+			<h2>Artist Statement</h2>
+			<p>
+				Fabrications sustain my work. The word fabrication (from fabricare: to make, to construct)
+				describes the objects and stories that we craft for ourselves and each other. Fabrications, in
+				terms of products, lean on the extractive, exploitative, and dehumanizing practices of
+				capitalism. Fabrications, in terms of untruths, deceive and debase. But fabrications also
+				flourish outside systems of exploitation and deception. Artists fabricate fictions with words,
+				sounds, and materials that speak to broader truths and shared experiences.
+			</p>
+			<p>
+				My interest in fabrication started with the puppets in my mom's therapy office. A furry family
+				of beautifully-constructed dead things helped people in crisis build a fictive space for real
+				emotion, real communication. This interest has since evolved into a curiosity with how we
+				determine what is real and not real. This interest push/pulls me towards a place of
+				indeterminacy, a place where I hope to fabricate my art.
+			</p>
+		</section>
+	</div>
+</AppShell>
+
+<style>
+	.info-page {
+		max-width: 640px;
+		margin: 0 auto;
+		padding: 32px 20px 60px;
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.6;
+	}
+
+	h2 {
+		font-family: var(--font-heading);
+		font-weight: 800;
+		font-size: 20px;
+		margin: 32px 0 12px;
+	}
+
+	section:first-of-type h2 {
+		margin-top: 0;
+	}
+</style>

@@ -1,0 +1,69 @@
+---
+import AppShell from './AppShell.astro';
+
+interface Props {
+	title: string;
+	color: string;
+	tag?: string;
+}
+const { title, color, tag } = Astro.props;
+---
+
+<AppShell title={`${title} — averylawrence.com`}>
+	<div class="title-bar" style={`background-color: ${color}`}>
+		<span class="title-bar-spacer"></span>
+		<span class="title-bar-title">{title}</span>
+		<span class="title-bar-tag">{tag}</span>
+	</div>
+	<div class="project-content">
+		<slot />
+	</div>
+</AppShell>
+
+<style>
+	.title-bar {
+		display: flex;
+		align-items: center;
+		height: var(--bar-height-desktop);
+		padding: 0 16px;
+		position: relative;
+	}
+
+	.title-bar-spacer {
+		width: 44px;
+	}
+
+	.title-bar-title {
+		flex: 1;
+		text-align: center;
+		font-family: var(--font-heading);
+		font-weight: 800;
+		font-size: 20px;
+		color: var(--color-black);
+	}
+
+	.title-bar-tag {
+		position: absolute;
+		right: 16px;
+		font-family: var(--font-body);
+		font-weight: 600;
+		font-size: 10px;
+		color: rgb(0 0 0 / 50%);
+		text-transform: uppercase;
+	}
+
+	@media (max-width: 600px) {
+		.title-bar {
+			height: var(--bar-height-mobile);
+		}
+
+		.title-bar-title {
+			font-size: 17px;
+		}
+
+		.title-bar-tag,
+		.title-bar-spacer {
+			display: none;
+		}
+	}
+</style>

@@ -1,0 +1,46 @@
+---
+import { getCollection, render } from 'astro:content';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import GridTemplate from '../../components/templates/GridTemplate.astro';
+import HeroTemplate from '../../components/templates/HeroTemplate.astro';
+import SplitTemplate from '../../components/templates/SplitTemplate.astro';
+import { projectColor } from '../../lib/colors';
+
+export async function getStaticPaths() {
+	const projects = await getCollection('projects');
+	return projects.map((project) => ({
+		params: { slug: project.id },
+		props: { project },
+	}));
+}
+
+const { project } = Astro.props;
+const { title, order, tags, status, template, hue, body, video, images } = project.data;
+const color = projectColor(order, hue);
+---
+
+<ProjectLayout title={title} color={color} tag={tags[0]}>
+	{
+		status === 'coming-soon' ? (
+			<div class="coming-soon">
+				<p>More on this project soon.</p>
+			</div>
+		) : template === 'hero' ? (
+			<HeroTemplate body={body} video={video} images={images} />
+		) : template === 'split' ? (
+			<SplitTemplate body={body} images={images} />
+		) : (
+			<GridTemplate body={body} images={images} />
+		)
+	}
+</ProjectLayout>
+
+<style>
+	.coming-soon {
+		padding: 80px 16px;
+		text-align: center;
+		font-family: var(--font-body);
+		font-size: 16px;
+		color: #444;
+	}
+</style>

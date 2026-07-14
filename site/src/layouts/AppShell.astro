@@ -1,0 +1,47 @@
+---
+import BaseHead from './BaseHead.astro';
+import Header from '../components/Header.astro';
+
+interface Props {
+	title: string;
+	showToggle?: boolean;
+}
+const { title, showToggle = false } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} />
+	</head>
+	<body>
+		<div class="app-shell">
+			<Header showToggle={showToggle} />
+			<div class="app-body">
+				<div class="app-scroll">
+					<slot />
+				</div>
+				<slot name="overlay" />
+			</div>
+		</div>
+	</body>
+</html>
+
+<style is:global>
+	.app-shell {
+		display: flex;
+		flex-direction: column;
+		height: 100dvh;
+	}
+
+	.app-body {
+		flex: 1;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.app-scroll {
+		position: absolute;
+		inset: 0;
+		overflow-y: auto;
+	}
+</style>

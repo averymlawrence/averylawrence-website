@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets';
+
+interface ImageEntry {
+	src: ImageMetadata;
+	alt: string;
+	caption: string;
+}
+
+interface Props {
+	body?: string;
+	images: ImageEntry[];
+}
+const { body, images } = Astro.props;
+---
+
+<div class="grid-template">
+	{body && <p class="intro">{body}</p>}
+	<div class="grid">
+		{
+			images.map((img) => (
+				<figure class="grid-cell">
+					<Image src={img.src} alt={img.alt} />
+					<figcaption>{img.caption}</figcaption>
+				</figure>
+			))
+		}
+	</div>
+</div>
+
+<style>
+	.grid-template {
+		padding: 24px 16px 60px;
+		max-width: 1100px;
+		margin: 0 auto;
+	}
+
+	.intro {
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.6;
+		max-width: 640px;
+		margin: 0 auto 32px;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 32px 24px;
+	}
+
+	.grid-cell {
+		margin: 0;
+	}
+
+	.grid-cell :global(img) {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	figcaption {
+		font-family: var(--font-body);
+		font-size: 13.5px;
+		color: #333;
+		margin-top: 8px;
+		line-height: 1.5;
+	}
+
+	@media (min-width: 900px) {
+		.grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	@media (max-width: 600px) {
+		.grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
