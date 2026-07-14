@@ -6,3 +6,6 @@ dist/
 
 # personal/admin material, not for the public repo
 Website 2026/01_important info/
+
+# raw source content, kept local-only (site/src/content/projects has the processed copies)
+Website 2026/02_Content/
