@@ -40,9 +40,10 @@ const label = status === 'coming-soon' ? 'soon' : tags[0];
 		flex: 1;
 		text-align: center;
 		font-family: var(--font-heading);
-		font-weight: 800;
-		font-size: 20px;
+		font-weight: 500;
+		font-size: 34px;
 		color: var(--color-black);
+		transition: color 0.15s ease;
 	}
 
 	.project-bar-tag {
@@ -53,6 +54,16 @@ const label = status === 'coming-soon' ? 'soon' : tags[0];
 		font-size: 10px;
 		color: rgb(0 0 0 / 50%);
 		text-transform: uppercase;
+		transition: color 0.15s ease;
+	}
+
+	.project-bar:hover {
+		background: var(--color-black) !important;
+	}
+
+	.project-bar:hover .project-bar-title,
+	.project-bar:hover .project-bar-tag {
+		color: var(--highlight);
 	}
 
 	@media (max-width: 600px) {
@@ -62,7 +73,7 @@ const label = status === 'coming-soon' ? 'soon' : tags[0];
 		}
 
 		.project-bar-title {
-			font-size: 17px;
+			font-size: 24px;
 		}
 
 		.project-bar-tag {

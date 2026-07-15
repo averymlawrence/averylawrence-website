@@ -5,7 +5,7 @@ interface Props {
 }
 const { text, href } = Astro.props;
 const Tag = href ? 'a' : 'div';
-const repeated = Array.from({ length: 6 }, () => text).join(' · ');
+const repeated = Array.from({ length: 40 }, () => text).join(' · ');
 ---
 
 <Tag class="aw-marquee-wrap" {...(href ? { href } : {})}>
@@ -28,16 +28,25 @@ const repeated = Array.from({ length: 6 }, () => text).join(' · ');
 	.aw-marquee-track {
 		display: flex;
 		white-space: nowrap;
-		animation: marqueeScroll 9s linear infinite;
+		animation: marqueeScroll 130s linear infinite;
+	}
+
+	.aw-marquee-wrap:hover .aw-marquee-track {
+		animation-play-state: paused;
 	}
 
 	.aw-marquee-item {
 		font-family: var(--font-heading);
-		font-weight: 800;
-		font-size: 16px;
+		font-weight: 500;
+		font-size: 34px;
 		color: var(--color-white);
 		letter-spacing: 1px;
 		padding: 0 18px;
+		transition: color 0.15s ease;
+	}
+
+	.aw-marquee-wrap:hover .aw-marquee-item {
+		color: var(--highlight);
 	}
 
 	@keyframes marqueeScroll {
@@ -55,7 +64,7 @@ const repeated = Array.from({ length: 6 }, () => text).join(' · ');
 		}
 
 		.aw-marquee-item {
-			font-size: 14px;
+			font-size: 24px;
 		}
 	}
 </style>

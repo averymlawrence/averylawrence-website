@@ -14,10 +14,11 @@ const { title, showToggle = false } = Astro.props;
 		<BaseHead title={title} />
 	</head>
 	<body>
+		<a href="#main" class="skip-link">Skip to content</a>
 		<div class="app-shell">
 			<Header showToggle={showToggle} />
 			<div class="app-body">
-				<div class="app-scroll">
+				<div class="app-scroll" id="main">
 					<slot />
 				</div>
 				<slot name="overlay" />

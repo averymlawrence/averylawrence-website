@@ -1,0 +1,200 @@
+---
+import { Image } from 'astro:assets';
+import Lightbox from './Lightbox.astro';
+
+interface ImageEntry {
+	src: ImageMetadata;
+	alt: string;
+	caption: string;
+}
+
+interface Props {
+	overview?: string;
+	credits: string[];
+	tags: string[];
+	video?: string;
+	body?: string;
+	images: ImageEntry[];
+	tintColor: string;
+}
+const { overview, credits, tags, video, body, images, tintColor } = Astro.props;
+---
+
+<div class="project-body" style={`--tint-color: ${tintColor}`}>
+	<div class="info-col">
+		{overview && <p class="overview">{overview}</p>}
+		{
+			credits.length > 0 && (
+				<div class="credits">
+					<h3>Who helped</h3>
+					<ul>
+						{credits.map((c) => (
+							<li>{c}</li>
+						))}
+					</ul>
+				</div>
+			)
+		}
+		{
+			tags.length > 0 && (
+				<div class="tag-chips">
+					{tags.map((t) => (
+						<span class="tag-chip">{t}</span>
+					))}
+				</div>
+			)
+		}
+	</div>
+	<div class="media-col">
+		{
+			video && (
+				<figure class="media-item">
+					<video src={video} controls playsinline />
+					{body && <figcaption>{body}</figcaption>}
+				</figure>
+			)
+		}
+		{
+			images.map((img) => (
+				<figure class="media-item">
+					<button class="media-trigger" data-lightbox-trigger data-alt={img.alt} data-caption={img.caption}>
+						<Image src={img.src} alt={img.alt} widths={[400, 800, 1200]} sizes="(max-width: 900px) 100vw, 55vw" />
+					</button>
+					<details class="img-desc">
+						<summary>image description</summary>
+						<p>{img.caption}</p>
+					</details>
+				</figure>
+			))
+		}
+	</div>
+</div>
+
+<Lightbox />
+
+<style>
+	.project-body {
+		display: grid;
+		grid-template-columns: 1fr 1.15fr;
+		gap: 32px;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 24px 16px 60px;
+		align-items: start;
+	}
+
+	.info-col {
+		position: sticky;
+		top: 24px;
+		padding: 24px;
+	}
+
+	.overview {
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.6;
+		white-space: pre-line;
+	}
+
+	.credits h3,
+	.tag-chips {
+		margin-top: 20px;
+	}
+
+	.credits h3 {
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 15px;
+		margin-bottom: 8px;
+	}
+
+	.credits ul {
+		margin: 0;
+		padding-left: 18px;
+		font-family: var(--font-body);
+		font-size: 14px;
+		line-height: 1.6;
+	}
+
+	.tag-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	.tag-chip {
+		font-family: var(--font-body);
+		font-weight: 600;
+		font-size: 11px;
+		text-transform: uppercase;
+		border: 1.5px solid var(--color-black);
+		border-radius: var(--radius-sm);
+		padding: 4px 10px;
+	}
+
+	.media-col {
+		display: flex;
+		flex-direction: column;
+		gap: 32px;
+	}
+
+	.media-item {
+		margin: 0;
+	}
+
+	.media-trigger {
+		display: block;
+		width: 100%;
+		padding: 0;
+		border: none;
+		background: none;
+		cursor: zoom-in;
+	}
+
+	.media-trigger :global(img),
+	.media-item video {
+		width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	.img-desc {
+		margin-top: 8px;
+		font-family: var(--font-body);
+		font-size: 13.5px;
+		color: #333;
+	}
+
+	.img-desc summary {
+		cursor: pointer;
+		font-weight: 600;
+		color: #111;
+	}
+
+	.img-desc p {
+		line-height: 1.6;
+		margin: 8px 0 0;
+	}
+
+	figcaption {
+		font-family: var(--font-body);
+		font-size: 13.5px;
+		color: #333;
+		margin-top: 8px;
+		line-height: 1.5;
+	}
+
+	@media (max-width: 900px) {
+		.project-body {
+			grid-template-columns: 1fr;
+		}
+
+		.info-col {
+			position: static;
+			order: -1;
+			background: var(--tint-color);
+			border-radius: var(--radius-sm);
+			margin-bottom: 8px;
+		}
+	}
+</style>

@@ -3,7 +3,13 @@ title: "The Weather"
 order: 5
 tags: [installation, video]
 status: "ready"
-template: "hero"
+overview: |-
+  For the past few years, I've slowly been working on a project called The Weather. The conceptual center of the project is the Weather Man and his hands. As the be-suited white Weather Man (a proxy for the white-supremacist, capitalist patriarchy and the havoc it has wreaked on the planet), he IS the weather — no longer just reporting a science-based guess culled from historic data, but embodying the storms and disasters of our own making.
+
+  The Weather, Vol. 1 was a proof of concept: working in a green screen studio, I reenacted some of the Weather Man's classic gestures, alongside two CMYK screen prints relating cartoon imagery, 3D modeling, climate disaster, and televised reportage. The Weather, Vol. 2 is a focused study of one component of the Weather Man's movement: his hands — considering the hands of art, entertainment, communication, technology, religion, and politics, in the execution of one animation.
+credits:
+  - "Emily Corazon Nelson Lawrence"
+  - "Elizabeth Stoner"
 video: "/media/the-weather/Lawrence_Avery-The_Weather_Vol2-2023.WEB.3.mp4"
 body: |-
   A looping video that demonstrates the process for creating some of the animation in The Weather, Vol. 2. The first seconds show wobbly 3D-animated tubes superimposed over two arms waving up and down. The text in this section reads "source material: video footage + 3D animation." The next section switches to the same motion traced with black contour lines. The effect reads as cartoon. The text in this section reads "rotoscoping: 'inked' lines." Finally, pink and auburn color is added to the arms and there is a green, textured backdrop. The text reads "rotoscoping: full-color 'cel'" and "The Weather, Vol. 2 animation test #1."

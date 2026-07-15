@@ -3,9 +3,16 @@ title: "Team Photo"
 order: 4
 tags: [photo]
 status: "ready"
-template: "grid"
-body: |-
-  In the mid-1990s, Winx Lawrence started a recreational soccer team in Charlottesville, VA with the goal of bridging divides across socio-economic status and race that she observed in the city.
+overview: |-
+  In 2018, I collaborated with The Garage art space to create Team Photo. The project was featured in the Charlottesville, VA edition of Ed Woodham's Art in Odd Places. One year after the white supremacist "Unite the Right Rally," I invited community members to come together to play soccer, have a picnic dinner, and pose for a really wide team portrait. With this project, an artwork created space for play and togetherness in a community that had recently suffered a nationally-broadcast trauma.
+
+  The work is inspired by my mom. In the mid-1990s, Winx Lawrence started what informally became known as the Garrett Square Soccer Team, with the goal of bridging divides across socio-economic status and race that she observed in the city. It was a way for her to be involved in my after-school activities and to get my friends living in Garrett Square (known today as Friendship Court) more interested in soccer. Each season, the group took a team photo — arranging themselves in two rows, the players posed in uniform with a soccer ball placed on the ground, front and center.
+credits:
+  - "The Garage and Sam Bush"
+  - "Mom and Dad"
+  - "Sarah and Bob"
+  - "Friendship Court"
+  - "Damian Washington"
 images:
   - src: "./team-photo/Lawrence-Avery_Team_Photo-2018.WEB.1.jpg"
     alt: "A photo of a youth soccer team from the 1990s. Wearing yellow jerseys, the team is arranged in two rows. The kids in the back stand and the kids in the front kneel. Four adult coaches stand behind the kids."

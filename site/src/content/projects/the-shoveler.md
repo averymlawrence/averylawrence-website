@@ -3,7 +3,10 @@ title: "The Shoveler"
 order: 1
 tags: [video]
 status: "ready"
-template: "grid"
+overview: |-
+  An intermittently kinetic life-size push puppet on a plinth with a shovel and a pile of snow. It is part of the Medium Dead series. The sculpture was first exhibited at the World of Winter Festival in Grand Rapids, MI from January 12 - March 10, 2024.
+credits:
+  - "Mary Reid Kelley & Patrick Kelley"
 images:
   - src: "./the-shoveler/Lawrence_Avery_The-Shoveler-2024.WEB.1.jpg"
     alt: "a 3D rendering of a push puppet toy shoveling snow"

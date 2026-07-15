@@ -1,0 +1,167 @@
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
+	<button class="lightbox-close" id="lightbox-close" aria-label="Close image viewer">×</button>
+	<button class="lightbox-prev" id="lightbox-prev" aria-label="Previous image">‹</button>
+	<div class="lightbox-frame">
+		<img id="lightbox-img" alt="" />
+	</div>
+	<button class="lightbox-next" id="lightbox-next" aria-label="Next image">›</button>
+	<p class="lightbox-caption" id="lightbox-caption"></p>
+</div>
+
+<style>
+	.lightbox {
+		position: fixed;
+		inset: 0;
+		z-index: 200;
+		background: rgb(0 0 0 / 92%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+	}
+
+	.lightbox[hidden] {
+		display: none;
+	}
+
+	.lightbox-frame {
+		flex: 1;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: safe center;
+		overflow: auto;
+		min-height: 0;
+	}
+
+	.lightbox-frame img {
+		height: 85vh;
+		width: auto;
+		max-width: none;
+		flex: none;
+		object-fit: contain;
+	}
+
+	.lightbox-caption {
+		color: var(--color-white);
+		font-family: var(--font-body);
+		font-size: 13.5px;
+		max-width: 720px;
+		text-align: center;
+		margin: 12px 0 0;
+	}
+
+	.lightbox-close,
+	.lightbox-prev,
+	.lightbox-next {
+		position: absolute;
+		background: transparent;
+		border: none;
+		color: var(--color-white);
+		cursor: pointer;
+		font-family: var(--font-body);
+		line-height: 1;
+	}
+
+	.lightbox-close {
+		top: 16px;
+		right: 20px;
+		font-size: 32px;
+	}
+
+	.lightbox-prev,
+	.lightbox-next {
+		top: 50%;
+		transform: translateY(-50%);
+		font-size: 48px;
+		padding: 0 12px;
+	}
+
+	.lightbox-prev {
+		left: 8px;
+	}
+
+	.lightbox-next {
+		right: 8px;
+	}
+</style>
+
+<script>
+	let currentKeydownHandler: ((e: KeyboardEvent) => void) | null = null;
+
+	function initLightbox() {
+		const lightbox = document.getElementById('lightbox');
+		const img = document.getElementById('lightbox-img') as HTMLImageElement | null;
+		const caption = document.getElementById('lightbox-caption');
+		const closeBtn = document.getElementById('lightbox-close');
+		const prevBtn = document.getElementById('lightbox-prev');
+		const nextBtn = document.getElementById('lightbox-next');
+		const triggers = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-lightbox-trigger]'));
+		if (!lightbox || !img || !caption || !triggers.length) return;
+
+		let index = 0;
+		let lastFocused: HTMLElement | null = null;
+
+		function show(i: number) {
+			index = (i + triggers.length) % triggers.length;
+			const trigger = triggers[index];
+			const src = trigger.dataset.fullSrc || trigger.querySelector('img')?.getAttribute('src') || '';
+			img.src = src;
+			img.alt = trigger.dataset.alt || '';
+			caption.textContent = trigger.dataset.caption || '';
+		}
+
+		function open(i: number) {
+			lastFocused = document.activeElement as HTMLElement;
+			show(i);
+			lightbox.hidden = false;
+			closeBtn?.focus();
+			document.body.style.overflow = 'hidden';
+		}
+
+		function close() {
+			lightbox.hidden = true;
+			document.body.style.overflow = '';
+			lastFocused?.focus();
+		}
+
+		triggers.forEach((trigger, i) => {
+			trigger.addEventListener('click', () => open(i));
+		});
+
+		closeBtn?.addEventListener('click', close);
+		prevBtn?.addEventListener('click', () => show(index - 1));
+		nextBtn?.addEventListener('click', () => show(index + 1));
+
+		lightbox.addEventListener('click', (e) => {
+			if (e.target === lightbox) close();
+		});
+
+		if (currentKeydownHandler) {
+			document.removeEventListener('keydown', currentKeydownHandler);
+		}
+		currentKeydownHandler = (e) => {
+			if (lightbox.hidden) return;
+			if (e.key === 'Escape') close();
+			if (e.key === 'ArrowLeft') show(index - 1);
+			if (e.key === 'ArrowRight') show(index + 1);
+			if (e.key === 'Tab') {
+				// simple focus trap between the three controls
+				const focusable = [closeBtn, prevBtn, nextBtn].filter(Boolean) as HTMLElement[];
+				const first = focusable[0];
+				const last = focusable[focusable.length - 1];
+				if (e.shiftKey && document.activeElement === first) {
+					e.preventDefault();
+					last.focus();
+				} else if (!e.shiftKey && document.activeElement === last) {
+					e.preventDefault();
+					first.focus();
+				}
+			}
+		};
+		document.addEventListener('keydown', currentKeydownHandler);
+	}
+
+	document.addEventListener('astro:page-load', initLightbox);
+</script>

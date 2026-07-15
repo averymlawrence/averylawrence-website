@@ -28,6 +28,15 @@ export function projectColor(order: number, hueOverride?: number): string {
 	return `oklch(${match[1]} ${match[2]} ${hueOverride})`;
 }
 
+// Light tint of a project's bar color, used as the background behind its
+// overview/credits block on mobile project pages.
+export function projectColorTint(order: number, hueOverride?: number): string {
+	const base = projectColor(order, hueOverride);
+	const match = base.match(/oklch\([\d.]+% [\d.]+ ([\d.]+)\)/);
+	const hue = match ? match[1] : '250';
+	return `oklch(94% 0.03 ${hue})`;
+}
+
 export const GRAY = {
 	teaching: 'oklch(65% 0 0)',
 	resumes: 'oklch(72% 0 0)',

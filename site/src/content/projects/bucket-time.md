@@ -3,7 +3,11 @@ title: "Bucket Time"
 order: 17
 tags: [installation, performance]
 status: "ready"
-template: "grid"
+overview: |-
+  Bucket Time is a series of performances I did at the Contemporary Arts Center in New Orleans, LA as part of the group show "A Building With a View": Experiments in Anarchitecture, curated by Andrea Andersson — a series of weekly live performances during Open Call. In bucket time, I address an audience while holding a headstand, my head in a bucket, a hole revealing my mouth. In this position, the body above the bucket begins to separate from the isolated mouth that talks, sings, and recites from within the bucket. Some of the performances re-stage extant mouth-focused works (Samuel Beckett's "Not I", Vito Acconci's "Open Book", a minstrel show "stump speech" by Slim Williams); some are new. All of them are a tipping over and pouring out of ideas, experiences, feelings, and memories.
+credits:
+  - "Emily Corazon Nelson Lawrence"
+  - "von curtis"
 images:
   - src: "./bucket-time/Lawrence_Avery_Bucket-Time_WEB.1.jpg"
     alt: "Three photographs of Avery Lawrence doing a handstand with his head in a white 5-gallon bucket."

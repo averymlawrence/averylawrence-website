@@ -1,10 +1,8 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import ProjectLayout from '../../layouts/ProjectLayout.astro';
-import GridTemplate from '../../components/templates/GridTemplate.astro';
-import HeroTemplate from '../../components/templates/HeroTemplate.astro';
-import SplitTemplate from '../../components/templates/SplitTemplate.astro';
-import { projectColor } from '../../lib/colors';
+import ProjectBody from '../../components/ProjectBody.astro';
+import { projectColor, projectColorTint } from '../../lib/colors';
 
 export async function getStaticPaths() {
 	const projects = await getCollection('projects');
@@ -15,8 +13,9 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { title, order, tags, status, template, hue, body, video, images } = project.data;
+const { title, order, tags, status, hue, overview, credits, body, video, images } = project.data;
 const color = projectColor(order, hue);
+const tint = projectColorTint(order, hue);
 ---
 
 <ProjectLayout title={title} color={color} tag={tags[0]}>
@@ -25,12 +24,16 @@ const color = projectColor(order, hue);
 			<div class="coming-soon">
 				<p>More on this project soon.</p>
 			</div>
-		) : template === 'hero' ? (
-			<HeroTemplate body={body} video={video} images={images} />
-		) : template === 'split' ? (
-			<SplitTemplate body={body} images={images} />
 		) : (
-			<GridTemplate body={body} images={images} />
+			<ProjectBody
+				overview={overview}
+				credits={credits}
+				tags={tags}
+				video={video}
+				body={body}
+				images={images}
+				tintColor={tint}
+			/>
 		)
 	}
 </ProjectLayout>

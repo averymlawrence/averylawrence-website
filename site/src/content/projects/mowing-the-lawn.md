@@ -3,7 +3,12 @@ title: "Mowing the Lawn"
 order: 10
 tags: [performance]
 status: "ready"
-template: "hero"
+overview: |-
+  In Mowing the Lawn, a character mows a mound of artificial turf that periodically grows. The piece started as a performance that accompanied an image — in 2013, I created an edition of 100 screenprints of a person mowing a lawn, commissioned by Pelican Bomb. In my first year of graduate school at CalArts, I expanded the performance into a short video, shot in the high desert of Antelope Valley, CA. I used the piece to process some thoughts about property, work, motivation, futility, and the absurd — finding inspiration in Sisyphus, as well as the history of development in that landscape.
+credits:
+  - "Pelican Bomb"
+  - "Chathas + Crosby + Manuela de Laborde"
+  - "Christopher Foss"
 body: |-
   The six minute, forty-five second Mowing the Lawn video starts with a white screen. The white fades to a character sitting in a plastic lawn chair. To his right is a gold floor lamp. To his left is a red, push reel mower and a mound of artificial turf. The character and mound are on a large concrete pad in the middle of a flat, desert shrubland with a large hill centered in the distance. The character, played by Avery Lawrence, wears a straw pork pie hat, white short-sleeve button up shirt, red shorts, black socks, and white low-top Converse sneakers. He stands and pushes the mower up and over the mound, turns around, pushes it back, and then sits in the lawn chair. He sips lemonade. Off camera the mound grows, again and again, until it measures twenty-four feet wide by twelve feet high. He notices fresh lemonade on the other side. He dislodges his lawn chair island, to which is connected the chair and floor lamp, attaches the island to his back, hooks the mower under his belt, and traverses the mound, using a rope. On the other side, he positions the lawn island at the foot of the mound. He sits. He sips his lemonade, looks at the camera, then looks back toward the mound, which is off-camera. The video fades to white.
 images:

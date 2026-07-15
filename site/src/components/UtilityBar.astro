@@ -23,14 +23,27 @@ const { title, href, color } = Astro.props;
 
 	.utility-bar-title {
 		font-family: var(--font-heading);
-		font-weight: 800;
-		font-size: 15px;
+		font-weight: 500;
+		font-size: 22px;
 		color: var(--color-black);
+		transition: color 0.15s ease;
+	}
+
+	.utility-bar:hover {
+		background: var(--color-black) !important;
+	}
+
+	.utility-bar:hover .utility-bar-title {
+		color: var(--highlight);
 	}
 
 	@media (max-width: 600px) {
 		.utility-bar {
 			height: var(--bar-height-mobile);
+		}
+
+		.utility-bar-title {
+			font-size: 16px;
 		}
 	}
 </style>

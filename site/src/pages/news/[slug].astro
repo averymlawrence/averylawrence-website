@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import ProjectBody from '../../components/ProjectBody.astro';
+import { GRAY } from '../../lib/colors';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('news');
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const { title, date, body, images } = post.data;
+const dateLabel = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<ProjectLayout title={title} color={GRAY.resumes}>
+	<p class="post-date">{dateLabel}</p>
+	<ProjectBody overview={body} credits={[]} tags={[]} images={images} tintColor={GRAY.resumes} />
+</ProjectLayout>
+
+<style>
+	.post-date {
+		max-width: 1200px;
+		margin: 20px auto 0;
+		padding: 0 16px;
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: #666;
+	}
+</style>

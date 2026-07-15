@@ -4,6 +4,21 @@ import AppShell from '../layouts/AppShell.astro';
 
 <AppShell title="info — averylawrence.com">
 	<div class="info-page">
+		<figure class="headshot">
+			<img
+				src="/media/info/avery-lawrence-headshot.gif"
+				alt="a 3D scan of Avery Lawrence's head and shoulders that rotates like a wheel"
+			/>
+			<details class="img-desc">
+				<summary>image description</summary>
+				<p>
+					In this 3D scan, Avery wears a pink and gray checkered shirt and a fairly close-cut hairdo.
+					His pink skin appears blue-gray; the baby blue background of the image seems to affect all the
+					colors. Every second or so, Avery's head and shoulders complete a full backwards rotation,
+					spinning like a wheel with its hub at Avery's neck.
+				</p>
+			</details>
+		</figure>
 		<section>
 			<h2>Bio</h2>
 			<p>
@@ -55,12 +70,40 @@ import AppShell from '../layouts/AppShell.astro';
 
 	h2 {
 		font-family: var(--font-heading);
-		font-weight: 800;
+		font-weight: 500;
 		font-size: 20px;
 		margin: 32px 0 12px;
 	}
 
 	section:first-of-type h2 {
 		margin-top: 0;
+	}
+
+	.headshot {
+		margin: 0 0 12px;
+	}
+
+	.headshot img {
+		width: 100%;
+		max-width: 320px;
+		display: block;
+		border-radius: var(--radius-sm);
+	}
+
+	.img-desc {
+		margin-top: 8px;
+		font-size: 13.5px;
+		color: #333;
+	}
+
+	.img-desc summary {
+		cursor: pointer;
+		font-weight: 600;
+		color: #111;
+	}
+
+	.img-desc p {
+		line-height: 1.6;
+		margin: 8px 0 0;
 	}
 </style>

@@ -3,7 +3,8 @@ title: "Engine Studies"
 order: 6
 tags: [animation]
 status: "ready"
-template: "grid"
+overview: |-
+  Exhibited at the Museum of Contemporary Art Jacksonville, FL, 2015. In the Engine Studies paintings, diagrams of mechanical engines reveal nothing useful about how those engines function. Instead of labeling the components, the text in these paintings relates to me. In the first group, one painting is about race, one is about the internet, and the third is about some things I happened to be thinking, feeling, and doing when I made the painting. The combined imagery and text of the diagram, a common pedagogical tool, helped me unify and legitimize disparate words and phrases. Alongside each painting was a laser-engraved plaque with YouTube-style comments about the painting.
 images:
   - src: "./engine-studies/Lawrence-Avery_Engine_Study_I-2015.WEB.1.jpg"
     alt: "A painting of a car engine diagram with red text and a gradient background."

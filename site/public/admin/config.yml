@@ -1,0 +1,75 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+backend:
+  name: github
+  repo: averymlawrence/averylawrence-website
+  branch: main
+  # base_url points at the OAuth proxy (a Cloudflare Worker running sveltia-cms-auth).
+  # Replace this once the Worker is deployed — see Website 2026/00_design or ask Claude.
+  base_url: https://REPLACE-WITH-YOUR-CLOUDFLARE-WORKER-URL.workers.dev
+
+site_url: https://averylawrence.com
+logo_url: /favicon.svg
+
+# Fallback for any collection that doesn't set its own — projects/news below
+# override this with a per-entry folder instead.
+media_folder: site/public/media
+public_folder: /media
+
+collections:
+  - name: projects
+    label: Projects
+    label_singular: Project
+    folder: site/src/content/projects
+    media_folder: '{{slug}}'
+    public_folder: '/{{slug}}'
+    slug: '{{title}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Order, name: order, widget: number, hint: 'Position in the home page bar list (1-17)' }
+      - label: Tags
+        name: tags
+        widget: select
+        multiple: true
+        options: [performance, animation, video, installation, photo]
+      - label: Status
+        name: status
+        widget: select
+        options: [ready, coming-soon]
+        default: coming-soon
+      - { label: Hue override, name: hue, widget: number, required: false, hint: 'Optional — overrides the default bar color hue (0-360)' }
+      - { label: Overview, name: overview, widget: text, required: false }
+      - label: Credits
+        name: credits
+        widget: list
+        required: false
+        hint: 'One entry per person, e.g. "Ross McDermott — direction, camera, editing"'
+      - { label: Video path, name: video, widget: string, required: false, hint: 'Only for projects with an actual video file, e.g. /media/the-weather/clip.mp4' }
+      - { label: Video caption, name: body, widget: text, required: false }
+      - label: Images
+        name: images
+        widget: list
+        required: false
+        fields:
+          - { label: Image, name: src, widget: image }
+          - { label: Alt text, name: alt, widget: string, hint: 'Short, for screen readers' }
+          - { label: Image description, name: caption, widget: text, hint: 'Long-form description' }
+
+  - name: news
+    label: News
+    label_singular: Post
+    folder: site/src/content/news
+    media_folder: '{{slug}}'
+    public_folder: '/{{slug}}'
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime }
+      - label: Images
+        name: images
+        widget: list
+        required: false
+        fields:
+          - { label: Image, name: src, widget: image }
+          - { label: Alt text, name: alt, widget: string }
+          - { label: Image description, name: caption, widget: text }
+      - { label: Body, name: body, widget: markdown, required: false }

@@ -3,7 +3,16 @@ title: "More Medium Dead"
 order: 2
 tags: [video]
 status: "ready"
-template: "grid"
+overview: |-
+  See Medium Dead for an introduction to the overall project. In More Medium Dead, viewers experience the sculptures in a gallery, and I extend the push-puppet visual language into other art objects. When fabricating the original Medium Dead installation, I used the formal logic of the push puppet (segmentation, roundedness, reduction) to guide the design of associated objects — a dining set, a potted plant, Amazon boxes, and a street light. In More Medium Dead, I consider that logic's influence on two-dimensional images. Animated cartoons also segment, round, and reduce the world. I borrow the animation techniques "big ball of violence" (also "fight cloud") and smear frame to inform two series of paintings. The Big Ball paintings agglomerate the push puppet segments into a spherical mass. The Moving Flower series uses frame animation and the smear technique to present a floral version of the push puppet's erect-collapse cycle.
+
+  In Big Ball at Night and Big Ball at Day, I borrow the animation technique called "big ball of violence." Instead of detailing how the bodies intertwine in the middle of a fight, the animators encased the action in a meteorological phenomena. Out of this cloud, body parts would appear and disappear. It was a technique to "censor" moments of extreme cartoon violence, and to reduce the work the animator had to do in depicting the body.
+
+  In Moving Flower, I more directly quote the language of cartooning with a looping, 12-frame animation. The titular flower droops and boing-yoing-yoings back to erectness. Although each frame is as important — or unimportant — as any frame in a moving image, I allotted special focus on the smear frames, the images that distort the flower to indicate motion blur.
+credits:
+  - "Franco"
+  - "DJ Hellerman"
+  - "Matthew Tower"
 images:
   - src: "./more-medium-dead/Lawrence_Avery_More-Medium-Dead_WEB.1.jpg"
     alt: "A photograph of an art installation featuring multiple figurative wooden sculptures. The life-sized sculptures resemble push puppet toys."

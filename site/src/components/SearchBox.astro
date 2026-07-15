@@ -88,42 +88,46 @@
 		return pagefind;
 	}
 
-	const input = document.getElementById('search-input');
-	const results = document.getElementById('search-results');
-	let debounceTimer;
+	function initSearch() {
+		const input = document.getElementById('search-input');
+		const results = document.getElementById('search-results');
+		if (!input || !results) return;
+		let debounceTimer;
 
-	input?.addEventListener('input', () => {
-		clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(async () => {
-			const term = input.value.trim();
-			if (!results) return;
-			results.innerHTML = '';
-			if (!term) return;
+		input.addEventListener('input', () => {
+			clearTimeout(debounceTimer);
+			debounceTimer = setTimeout(async () => {
+				const term = input.value.trim();
+				results.innerHTML = '';
+				if (!term) return;
 
-			const pf = await loadPagefind();
-			if (!pf) {
-				results.innerHTML = '<p class="search-note">Search is available on the deployed site.</p>';
-				return;
-			}
+				const pf = await loadPagefind();
+				if (!pf) {
+					results.innerHTML = '<p class="search-note">Search is available on the deployed site.</p>';
+					return;
+				}
 
-			const search = await pf.search(term);
-			const data = await Promise.all(search.results.slice(0, 8).map((r) => r.data()));
-			if (data.length === 0) {
-				results.innerHTML = '<p class="search-note">No results.</p>';
-				return;
-			}
+				const search = await pf.search(term);
+				const data = await Promise.all(search.results.slice(0, 8).map((r) => r.data()));
+				if (data.length === 0) {
+					results.innerHTML = '<p class="search-note">No results.</p>';
+					return;
+				}
 
-			results.innerHTML = data
-				.map((d) => {
-					const title = (d.meta?.title ?? d.url).replace(/\s*—\s*averylawrence\.com$/, '');
-					return `
-				<a class="search-result" href="${d.url}">
-					<span class="search-result-title">${title}</span>
-					<span class="search-result-excerpt">${d.excerpt}</span>
-				</a>
-			`;
-				})
-				.join('');
-		}, 200);
-	});
+				results.innerHTML = data
+					.map((d) => {
+						const title = (d.meta?.title ?? d.url).replace(/\s*—\s*averylawrence\.com$/, '');
+						return `
+					<a class="search-result" href="${d.url}">
+						<span class="search-result-title">${title}</span>
+						<span class="search-result-excerpt">${d.excerpt}</span>
+					</a>
+				`;
+					})
+					.join('');
+			}, 200);
+		});
+	}
+
+	document.addEventListener('astro:page-load', initSearch);
 </script>

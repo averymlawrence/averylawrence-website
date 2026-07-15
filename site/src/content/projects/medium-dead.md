@@ -3,7 +3,14 @@ title: "Medium Dead"
 order: 3
 tags: [video]
 status: "ready"
-template: "grid"
+overview: |-
+  Medium Dead (2019–2023, East Market Building, Philadelphia, PA) is a series of sculptural tableaux featuring life-size figures modeled after push puppet toys. Made of construction lumber and durable house paint, these figures maintain their poses through an internal network of ropes, just like their tabletop antecedents.
+
+  The push puppet is a crudely articulated abstraction of a subject. It is a fake take on a real thing: a figure broken into pieces that occasionally collapses and persistently rebuilds. Like all puppets, the push puppet is an object that turns into a subject with the flick of a wrist, the tug of a string, a suspension of disbelief. I make mine big to put them in conversation with the history of monumental, figurative sculpture. Unlike traditional figurative statues, however, my push puppets are walking the dog, drinking coffee, riding the stationary bike. They offer mundanity as antidote to the monumental. The figures re-present certain scenes from our lives and offer us a moment to reconnect with our own experiences and each other.
+credits:
+  - "Steph"
+  - "Emily Nelson Lawrence"
+  - "Michael Lawrence"
 images:
   - src: "./medium-dead/Lawrence_Avery_Medium-Dead-2019_WEB.1.jpg"
     alt: "A photograph of two people walking past a window display featuring multiple life-size, wooden sculptures that look like push puppet toys."
