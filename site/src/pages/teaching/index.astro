@@ -1,0 +1,91 @@
+---
+import { getCollection } from 'astro:content';
+import AppShell from '../../layouts/AppShell.astro';
+import { GRAY } from '../../lib/colors';
+
+// A course appears here once it has student work filed under it.
+const work = await getCollection('studentwork');
+const courses = (await getCollection('courses'))
+	.filter((course) => work.some((w) => w.data.course.replace(/\/index$/, '') === course.id && w.data.works.length > 0))
+	.sort((a, b) => a.data.order - b.data.order);
+---
+
+<AppShell title="teaching — averylawrence.com" description="Student work from courses taught by Avery Lawrence.">
+	<div class="title-bar" style={`background-color: ${GRAY.teaching}`}>teaching</div>
+	{
+		courses.map((course) => (
+			<a class="course-bar" href={`/teaching/${course.id}`}>
+				<span class="course-title">{course.data.title}</span>
+				<span class="course-meta">
+					{course.data.school}
+					{course.data.years && `, ${course.data.years}`}
+				</span>
+			</a>
+		))
+	}
+</AppShell>
+
+<style>
+	.title-bar {
+		height: var(--bar-height-desktop);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 34px;
+	}
+
+	.course-bar {
+		min-height: var(--bar-height-desktop);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 2px;
+		padding: 12px 16px;
+		text-align: center;
+		text-decoration: none;
+		background: var(--color-white);
+		border-bottom: 1px solid var(--color-black);
+		transition: color 0.15s ease;
+	}
+
+	.course-title {
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 34px;
+		line-height: 1.15;
+	}
+
+	.course-meta {
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: #555;
+	}
+
+	.course-bar:hover {
+		background: var(--color-black);
+	}
+
+	.course-bar:hover .course-title,
+	.course-bar:hover .course-meta {
+		color: var(--highlight);
+	}
+
+	@media (max-width: 600px) {
+		.title-bar,
+		.course-bar {
+			min-height: var(--bar-height-mobile);
+		}
+
+		.title-bar {
+			height: var(--bar-height-mobile);
+		}
+
+		.title-bar,
+		.course-title {
+			font-size: 24px;
+		}
+	}
+</style>

@@ -1,0 +1,164 @@
+---
+// A grid of student work. Each item is a looping video (plays only while on
+// screen), a Vimeo/YouTube embed, or a still image.
+import { Image } from 'astro:assets';
+
+interface Work {
+	student: string;
+	title?: string | null;
+	video?: string | null;
+	poster?: string | null;
+	embed?: string | null;
+	image?: ImageMetadata | null;
+	alt?: string | null;
+	width?: number | null;
+	height?: number | null;
+}
+
+interface Props {
+	works: Work[];
+	/** Used for the accessible label when a work has no alt text, e.g. "Posters that move". */
+	label: string;
+}
+const { works, label } = Astro.props;
+
+// Turn a normal Vimeo/YouTube page link into its embeddable player address.
+function embedUrl(url: string): string {
+	const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{6,})/);
+	if (yt) return `https://www.youtube-nocookie.com/embed/${yt[1]}`;
+	const vimeo = url.match(/vimeo\.com\/(?:video\/)?(\d+)(?:\/(\w+))?/);
+	if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}${vimeo[2] ? `?h=${vimeo[2]}` : ''}`;
+	return url;
+}
+---
+
+<ul class:list={['work-grid', { 'has-embeds': works.some((w) => w.embed) }]}>
+	{
+		works.map((w) => {
+			const describe = w.alt ?? `${w.title ?? label} by ${w.student}`;
+			return (
+				<li class="work">
+					{w.embed ? (
+						<div class="embed">
+							<iframe
+								src={embedUrl(w.embed)}
+								title={describe}
+								loading="lazy"
+								allow="fullscreen; picture-in-picture"
+								allowfullscreen
+							/>
+						</div>
+					) : w.video ? (
+						<video
+							src={w.video}
+							poster={w.poster ?? undefined}
+							width={w.width ?? undefined}
+							height={w.height ?? undefined}
+							aria-label={describe}
+							muted
+							loop
+							playsinline
+							preload="none"
+							data-loop-video
+						/>
+					) : (
+						w.image && <Image src={w.image} alt={describe} widths={[300, 600]} sizes="(max-width: 600px) 50vw, 260px" />
+					)}
+					<p class="work-credit">
+						{w.title && <span class="work-title">{w.title}</span>}
+						<span>{w.student}</span>
+					</p>
+				</li>
+			);
+		})
+	}
+</ul>
+
+<style>
+	.work-grid {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+		gap: 24px 16px;
+	}
+
+	.work-grid.has-embeds {
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	}
+
+	.work video,
+	.work :global(img) {
+		display: block;
+		width: 100%;
+		height: auto;
+		background: var(--gray-4);
+	}
+
+	.embed {
+		aspect-ratio: 16 / 9;
+		background: var(--color-black);
+	}
+
+	.embed iframe {
+		width: 100%;
+		height: 100%;
+		border: 0;
+		display: block;
+	}
+
+	.work-credit {
+		margin: 6px 0 0;
+		font-family: var(--font-body);
+		font-size: 13px;
+		line-height: 1.4;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.work-title {
+		font-weight: 600;
+	}
+
+	@media (max-width: 600px) {
+		.work-grid {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 20px 12px;
+		}
+
+		.work-grid.has-embeds {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
+
+<script>
+	let observer: IntersectionObserver | null = null;
+
+	function initLoopVideos() {
+		observer?.disconnect();
+		const videos = document.querySelectorAll<HTMLVideoElement>('[data-loop-video]');
+		if (!videos.length) return;
+
+		// People who ask for reduced motion get still frames with play controls instead.
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			videos.forEach((v) => (v.controls = true));
+			return;
+		}
+
+		observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					const video = entry.target as HTMLVideoElement;
+					if (entry.isIntersecting) video.play().catch(() => {});
+					else video.pause();
+				}
+			},
+			{ rootMargin: '200px 0px' }
+		);
+		videos.forEach((v) => observer!.observe(v));
+	}
+
+	document.addEventListener('astro:page-load', initLoopVideos);
+</script>

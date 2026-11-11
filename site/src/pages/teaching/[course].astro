@@ -1,0 +1,111 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import WorkGrid from '../../components/WorkGrid.astro';
+import { GRAY } from '../../lib/colors';
+
+export async function getStaticPaths() {
+	const allWork = await getCollection('studentwork');
+	const courses = await getCollection('courses');
+	return courses
+		.map((course) => ({
+			course,
+			sets: allWork.filter((w) => w.data.course.replace(/\/index$/, '') === course.id && w.data.works.length > 0),
+		}))
+		.filter(({ sets }) => sets.length > 0)
+		.map(({ course, sets }) => ({ params: { course: course.id }, props: { course, sets } }));
+}
+
+const { course, sets } = Astro.props;
+const { title, school, years, description } = course.data;
+
+// Group the sets by assignment (in order of each assignment's newest term), newest term first within each.
+const newestFirst = [...sets].sort((a, b) => b.data.sort - a.data.sort);
+const assignments: { name: string; description?: string | null; terms: typeof sets }[] = [];
+for (const set of newestFirst) {
+	let group = assignments.find((a) => a.name === set.data.assignment);
+	if (!group) {
+		group = { name: set.data.assignment, description: null, terms: [] };
+		assignments.push(group);
+	}
+	group.description ??= set.data.assignment_description;
+	group.terms.push(set);
+}
+
+// Link preview: the first work's still frame, if there is one.
+const preview = newestFirst[0]?.data.works.find((w) => w.poster)?.poster ?? null;
+---
+
+<ProjectLayout title={title} color={GRAY.teaching} description={description} image={preview}>
+	<div class="course">
+		<header class="course-intro">
+			<p class="course-facts">
+				<a href="/teaching">teaching</a> / {school}{years && `, ${years}`}
+			</p>
+			{description && <p class="course-description">{description}</p>}
+		</header>
+
+		{
+			assignments.map((assignment) => (
+				<section class="assignment">
+					<h2>{assignment.name}</h2>
+					{assignment.description && <p class="assignment-description">{assignment.description}</p>}
+					{assignment.terms.map((set) => (
+						<div class="term">
+							<h3>{set.data.term}</h3>
+							<WorkGrid works={set.data.works} label={assignment.name} />
+						</div>
+					))}
+				</section>
+			))
+		}
+	</div>
+</ProjectLayout>
+
+<style>
+	.course {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 24px 16px 72px;
+		font-family: var(--font-body);
+	}
+
+	.course-facts {
+		margin: 0 0 12px;
+		font-size: 13.5px;
+		font-weight: 600;
+	}
+
+	.course-description,
+	.assignment-description {
+		max-width: 680px;
+		font-size: 15px;
+		line-height: 1.6;
+		margin: 0;
+		white-space: pre-line;
+	}
+
+	.assignment {
+		margin-top: 40px;
+		padding-top: 24px;
+		border-top: 1px solid var(--color-black);
+	}
+
+	.assignment h2 {
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 28px;
+		margin: 0 0 8px;
+	}
+
+	.term {
+		margin-top: 28px;
+	}
+
+	.term h3 {
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 17px;
+		margin: 0 0 14px;
+	}
+</style>

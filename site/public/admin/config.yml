@@ -117,3 +117,51 @@ collections:
           - { label: Alt text, name: alt, widget: string }
           - { label: Image description, name: caption, widget: text, required: false }
       - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: courses
+    label: Courses
+    label_singular: Course
+    folder: site/src/content/courses
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
+    slug: '{{title}}'
+    summary: '{{title}} — {{school}}'
+    fields:
+      - { label: Course title, name: title, widget: string }
+      - { label: School, name: school, widget: string, hint: 'e.g. University of Michigan, Stamps School of Art & Design' }
+      - { label: Years, name: years, widget: string, required: false, hint: 'e.g. 2024–present' }
+      - { label: Order, name: order, widget: number, value_type: float, hint: 'Sorts the teaching page, smallest first.' }
+      - { label: Description, name: description, widget: text, required: false }
+
+  - name: studentwork
+    label: Student work
+    label_singular: Set of student work
+    folder: site/src/content/studentwork
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
+    slug: '{{course}}-{{assignment}}-{{term}}'
+    summary: '{{assignment}} — {{term}}'
+    fields:
+      - label: Course
+        name: course
+        widget: relation
+        collection: courses
+        value_field: '{{slug}}'
+        display_fields: [title]
+        search_fields: [title]
+      - { label: Assignment, name: assignment, widget: string, hint: 'Sets with the same assignment name are grouped under one heading on the course page.' }
+      - { label: Assignment description, name: assignment_description, widget: text, required: false }
+      - { label: Term, name: term, widget: string, hint: 'e.g. Fall 2025' }
+      - { label: Sort number, name: sort, widget: number, value_type: float, hint: 'Newest shows first. Use the year, plus .5 for fall: Winter 2026 = 2026, Fall 2026 = 2026.5' }
+      - label: Works
+        name: works
+        widget: list
+        summary: '{{student}}'
+        fields:
+          - { label: Student, name: student, widget: string, hint: 'First name and last initial, e.g. Isha B.' }
+          - { label: Title, name: title, widget: string, required: false }
+          - { label: Vimeo or YouTube link, name: embed, widget: string, required: false, hint: 'Paste the normal page link. Use this for animation and video.' }
+          - { label: Image, name: image, widget: image, required: false, hint: 'For still work. Leave blank if you pasted a video link.' }
+          - { label: Alt text, name: alt, widget: string, required: false }

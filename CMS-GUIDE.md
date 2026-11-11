@@ -32,7 +32,7 @@ Tokens expire (yours was created with an expiration date). To make a new one:
 - Every **Save** in the CMS is published immediately. There is no draft step.
 - The live site rebuilds itself after each save and updates in about **2–3 minutes**.
 - To work on something without showing it, set a project's **Status** to `coming-soon` (see below). The project is hidden from the site completely — no bar, no page — until you switch it to `ready`.
-- If the site hasn't changed after 5 minutes, see [Troubleshooting](#8-troubleshooting).
+- If the site hasn't changed after 5 minutes, see [Troubleshooting](#9-troubleshooting).
 
 ---
 
@@ -121,19 +121,42 @@ Drag to reorder. The heading ("7 Comments") counts them automatically.
 
 ---
 
-## 7. What the CMS doesn't cover
+## 7. Add student work (teaching)
+
+The teaching page lists **courses**. Each course page shows **sets of student work**, grouped by assignment, newest term first. A course only appears on the site once it has at least one set with work in it.
+
+**Add a course (once per course):** **Courses** → **New** → title, school, years, order, description → **Save**.
+
+**Add a set of student work (once per assignment per term):**
+
+1. **Student work** → **New**.
+2. **Course** — pick it from the list.
+3. **Assignment** — e.g. `Walk cycle`. Use exactly the same name each term so the terms group under one heading.
+4. **Term** — e.g. `Fall 2025`. **Sort number** — the year, plus `.5` for fall (`2025.5`).
+5. Under **Works**, click **Add** per student:
+   - **Student** — first name and last initial, e.g. `Isha B.`
+   - **Vimeo or YouTube link** — for animation and video. Paste the ordinary page link; unlisted videos work.
+   - **Image** — for still work, instead of a link.
+   - **Title** and **Alt text** — optional.
+6. **Save**.
+
+Video *files* (like the looping Penn posters) can't be uploaded here — ask Claude.
+
+---
+
+## 8. What the CMS doesn't cover
 
 Ask Claude Code (open the `AveryLawrence-Website` folder) for:
 
 - The INFO page (bio, statement, headshot)
-- The teaching, resumes/statements, project management, bloopers, and shop pages
+- The resumes/statements, project management, bloopers, and shop pages
 - Video files
 - Anything about design: colors, bar sizes, fonts, layout
 - Adding a new tag to the filter list
 
 ---
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 **The site didn't update.**
 Open https://github.com/averymlawrence/averylawrence-website/actions. Each save appears as a run named "Deploy site".

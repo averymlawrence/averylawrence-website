@@ -69,4 +69,45 @@ const news = defineCollection({
 		}),
 });
 
-export const collections = { projects, news };
+// A course Avery teaches or taught. Its page lists the student work filed under it.
+const courses = defineCollection({
+	loader: glob({ pattern: '**/*.md', base: './src/content/courses' }),
+	schema: z.object({
+		title: z.string(),
+		school: z.string(),
+		years: z.string().nullish(),
+		order: z.number(),
+		description: z.string().nullish(),
+	}),
+});
+
+// One set of student work: a single assignment in a single term.
+const studentwork = defineCollection({
+	loader: glob({ pattern: '**/*.md', base: './src/content/studentwork' }),
+	schema: ({ image }) =>
+		z.object({
+			course: z.string(), // folder name of the course, e.g. "art-design-digital-culture"
+			assignment: z.string(),
+			assignment_description: z.string().nullish(),
+			term: z.string(), // e.g. "Spring 2023"
+			sort: z.number(), // newest first: year, plus .5 for fall
+			works: z
+				.array(
+					z.object({
+						// Students are credited as first name + last initial.
+						student: z.string(),
+						title: z.string().nullish(),
+						video: z.string().nullish(), // looping video file under /media/…
+						poster: z.string().nullish(), // still frame shown before the video loads
+						embed: z.string().nullish(), // Vimeo or YouTube link
+						image: image().nullish(),
+						alt: z.string().nullish(),
+						width: z.number().nullish(),
+						height: z.number().nullish(),
+					})
+				)
+				.default([]),
+		}),
+});
+
+export const collections = { projects, news, courses, studentwork };
