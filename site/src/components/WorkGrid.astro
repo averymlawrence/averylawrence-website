@@ -1,6 +1,7 @@
 ---
 // A grid of student work. Each item is a looping video (plays only while on
-// screen), a Vimeo/YouTube embed, or a still image.
+// screen), a Vimeo/YouTube embed, a live interactive sketch, a link to open
+// (e.g. a game), or a still image.
 import { Image } from 'astro:assets';
 
 interface Work {
@@ -9,6 +10,8 @@ interface Work {
 	video?: string | null;
 	poster?: string | null;
 	embed?: string | null;
+	sketch?: string | null;
+	link?: string | null;
 	image?: ImageMetadata | null;
 	alt?: string | null;
 	width?: number | null;
@@ -32,7 +35,8 @@ function embedUrl(url: string): string {
 }
 ---
 
-<ul class:list={['work-grid', { 'has-embeds': works.some((w) => w.embed) }]}>
+{works.some((w) => w.sketch) && <p class="grid-hint">These are live. Move your pointer (or finger) over a sketch.</p>}
+<ul class:list={['work-grid', { 'has-embeds': works.some((w) => w.embed || w.sketch || w.link) }]}>
 	{
 		works.map((w) => {
 			const describe = w.alt ?? `${w.title ?? label} by ${w.student}`;
@@ -48,6 +52,20 @@ function embedUrl(url: string): string {
 								allowfullscreen
 							/>
 						</div>
+					) : w.sketch ? (
+						<div
+							class="sketch-frame"
+							style={`aspect-ratio: ${w.width ?? 470} / ${w.height ?? 400}`}
+							data-sketch={w.sketch}
+							data-width={w.width ?? 470}
+							data-height={w.height ?? 400}
+							data-title={describe}
+						/>
+					) : w.link ? (
+						<a class="open-tile" href={w.link} target="_blank" rel="noopener">
+							<span class="open-title">{w.title ?? label}</span>
+							<span class="open-action">Open in a new tab ↗</span>
+						</a>
 					) : w.video ? (
 						<video
 							src={w.video}
@@ -65,8 +83,15 @@ function embedUrl(url: string): string {
 						w.image && <Image src={w.image} alt={describe} widths={[300, 600]} sizes="(max-width: 600px) 50vw, 260px" />
 					)}
 					<p class="work-credit">
-						{w.title && <span class="work-title">{w.title}</span>}
-						<span>{w.student}</span>
+						{w.title && !w.link && <span class="work-title">{w.title}</span>}
+						<span>
+							{w.student}
+							{w.sketch && (
+								<a class="open-link" href={w.sketch} target="_blank" rel="noopener" aria-label={`Open ${describe} in a new tab`}>
+									open ↗
+								</a>
+							)}
+						</span>
 					</p>
 				</li>
 			);
@@ -99,6 +124,61 @@ function embedUrl(url: string): string {
 	.embed {
 		aspect-ratio: 16 / 9;
 		background: var(--color-black);
+	}
+
+	.grid-hint {
+		font-family: var(--font-body);
+		font-size: 13px;
+		color: #555;
+		margin: 0 0 14px;
+	}
+
+	.sketch-frame {
+		position: relative;
+		overflow: hidden;
+		background: var(--gray-4);
+	}
+
+	.sketch-frame :global(iframe) {
+		position: absolute;
+		top: 0;
+		left: 0;
+		border: 0;
+		transform-origin: top left;
+	}
+
+	.open-tile {
+		aspect-ratio: 16 / 9;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		background: var(--color-black);
+		color: var(--color-white);
+		text-decoration: none;
+		transition: color 0.15s ease;
+	}
+
+	.open-tile:hover {
+		color: var(--highlight);
+	}
+
+	.open-title {
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 28px;
+	}
+
+	.open-action {
+		font-family: var(--font-body);
+		font-size: 13px;
+	}
+
+	.open-link {
+		margin-left: 8px;
+		font-size: 12px;
+		color: #555;
 	}
 
 	.embed iframe {
@@ -160,5 +240,51 @@ function embedUrl(url: string): string {
 		videos.forEach((v) => observer!.observe(v));
 	}
 
+	// Live sketches: each gets an iframe at its native size, scaled to fit its tile.
+	// The iframe only exists while the tile is near the screen, so a page full of
+	// sketches doesn't run them all at once.
+	let sketchObserver: IntersectionObserver | null = null;
+	let resizeObserver: ResizeObserver | null = null;
+
+	function fit(frame: HTMLElement) {
+		const iframe = frame.querySelector('iframe');
+		if (iframe) iframe.style.transform = `scale(${frame.clientWidth / Number(frame.dataset.width)})`;
+	}
+
+	function initSketches() {
+		sketchObserver?.disconnect();
+		resizeObserver?.disconnect();
+		const frames = document.querySelectorAll<HTMLElement>('[data-sketch]');
+		if (!frames.length) return;
+
+		resizeObserver = new ResizeObserver((entries) => entries.forEach((e) => fit(e.target as HTMLElement)));
+		sketchObserver = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					const frame = entry.target as HTMLElement;
+					const existing = frame.querySelector('iframe');
+					if (entry.isIntersecting && !existing) {
+						const iframe = document.createElement('iframe');
+						iframe.src = frame.dataset.sketch!;
+						iframe.title = frame.dataset.title ?? '';
+						iframe.width = frame.dataset.width!;
+						iframe.height = frame.dataset.height!;
+						iframe.setAttribute('scrolling', 'no');
+						frame.appendChild(iframe);
+						fit(frame);
+					} else if (!entry.isIntersecting && existing) {
+						existing.remove();
+					}
+				}
+			},
+			{ rootMargin: '300px 0px' }
+		);
+		frames.forEach((f) => {
+			sketchObserver!.observe(f);
+			resizeObserver!.observe(f);
+		});
+	}
+
 	document.addEventListener('astro:page-load', initLoopVideos);
+	document.addEventListener('astro:page-load', initSketches);
 </script>

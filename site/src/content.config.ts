@@ -100,6 +100,8 @@ const studentwork = defineCollection({
 						video: z.string().nullish(), // looping video file under /media/…
 						poster: z.string().nullish(), // still frame shown before the video loads
 						embed: z.string().nullish(), // Vimeo or YouTube link
+						sketch: z.string().nullish(), // live, interactive page shown in a frame (e.g. a p5.js sketch)
+						link: z.string().nullish(), // something to open on its own page (e.g. a game)
 						image: image().nullish(),
 						alt: z.string().nullish(),
 						width: z.number().nullish(),
