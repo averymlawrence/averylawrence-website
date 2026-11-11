@@ -70,18 +70,17 @@ const count = comments.length;
 </section>
 
 <style>
+	/* Sits at the bottom of the project page's left column. */
 	.comments {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 8px 16px 72px;
+		margin-top: 28px;
 	}
 
 	.comments h2 {
 		font-family: var(--font-heading);
 		font-weight: 500;
 		font-size: 20px;
-		margin: 0 0 20px;
-		padding-top: 24px;
+		margin: 0 0 16px;
+		padding-top: 20px;
 		border-top: 1px solid var(--color-black);
 	}
 
@@ -89,7 +88,6 @@ const count = comments.length;
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		max-width: 760px;
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
@@ -101,7 +99,7 @@ const count = comments.length;
 	}
 
 	.comment.is-reply {
-		margin-left: 52px;
+		margin-left: 40px;
 	}
 
 	.avatar {

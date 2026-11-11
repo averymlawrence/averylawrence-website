@@ -38,6 +38,7 @@ const preview = images[0] ? (await getImage({ src: images[0].src, width: 1200, f
 		videoCaption={video_caption}
 		images={images}
 		tintColor={tint}
-	/>
-	{comments.length > 0 && <Comments comments={comments} />}
+	>
+		{comments.length > 0 && <Comments slot="info-end" comments={comments} />}
+	</ProjectBody>
 </ProjectLayout>

@@ -88,6 +88,7 @@ const hasFacts = facts && (facts.year || facts.medium || facts.dimensions || fac
 				</div>
 			)
 		}
+		<slot name="info-end" />
 	</div>
 	<div class="media-col">
 		{
@@ -129,10 +130,17 @@ const hasFacts = facts && (facts.year || facts.medium || facts.dimensions || fac
 		align-items: start;
 	}
 
+	/* Desktop: the left column stays in view and scrolls on its own, so its
+	   bottom (comments) is reachable without scrolling past every image. */
 	.info-col {
 		position: sticky;
 		top: 24px;
+		max-height: calc(100dvh - var(--header-height-desktop) - 48px);
+		overflow-y: auto;
+		overscroll-behavior: contain;
 		padding: 24px;
+		scrollbar-color: var(--gray-2) transparent;
+		scrollbar-width: thin;
 	}
 
 	.facts {
@@ -276,6 +284,8 @@ const hasFacts = facts && (facts.year || facts.medium || facts.dimensions || fac
 
 		.info-col {
 			position: static;
+			max-height: none;
+			overflow: visible;
 			order: -1;
 			background: var(--tint-color);
 			border-radius: var(--radius-sm);
