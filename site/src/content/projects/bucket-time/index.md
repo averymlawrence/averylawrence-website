@@ -18,9 +18,6 @@ credits:
 video: ''
 video_caption: ''
 images:
-  - src: Lawrence_Avery_Bucket-Time_WEB.1.jpg
-    alt: Three photographs of Avery Lawrence doing a handstand with his head in a white 5-gallon bucket.
-    caption: A side-by-side arrangement of three photographs of Avery Lawrence doing a handstand with his head in a white 5-gallon bucket. He is in an art gallery with white walls and a concrete floor. He wears black pants in all the photos but different button-up shirts that are green, light blue, and white. The bucket is on a two-foot high white plinth. Avery's mouth is visible through a hole in the bucket. In a small stand in front of the bucket, a microphone and blue looping pedal rest on the plinth.
   - src: Lawrence_Avery_Bucket-Time_WEB.2.jpg
     alt: Four photographs of Avery Lawrence doing a handstand with his head in a white 5-gallon bucket.
     caption: A side-by-side arrangement of four photographs of Avery Lawrence performing Bucket Time at the Contemporary Arts Center (CAC) in New Orleans, LA. In each photo, he does a handstand with his head in a white 5-gallon bucket. He is wearing black pants in all the photos but different button-up shirts. One is a Hawaiian shirt with palm trees and pink flamingos. The other shirts are green, light blue, and white. These images document Avery's Bucket Time performance series at the Contemporary Art Center in New Orleans in 2016.
@@ -36,8 +33,8 @@ images:
 comments:
   - name: Buckethead_official
     text: yo. this is my thing
-    likes: 0
-    dislikes: 1
+    likes: 28
+    dislikes: 0
     when: 2 years ago
     reply: false
 ---
