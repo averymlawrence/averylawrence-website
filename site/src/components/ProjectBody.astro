@@ -119,6 +119,26 @@ const hasFacts = facts && (facts.year || facts.medium || facts.dimensions || fac
 
 <Lightbox />
 
+<script>
+	function fitInfoColumn() {
+		const col = document.querySelector<HTMLElement>('.info-col');
+		const scroller = document.getElementById('main');
+		if (!col || !scroller) return;
+		const apply = () => {
+			if (getComputedStyle(col).position !== 'sticky') {
+				col.style.removeProperty('--info-top');
+				return;
+			}
+			const top = Math.min(24, scroller.clientHeight - col.offsetHeight - 24);
+			col.style.setProperty('--info-top', `${top}px`);
+		};
+		apply();
+		new ResizeObserver(apply).observe(col);
+		new ResizeObserver(apply).observe(scroller);
+	}
+	document.addEventListener('astro:page-load', fitInfoColumn);
+</script>
+
 <style>
 	.project-body {
 		display: grid;
@@ -130,17 +150,15 @@ const hasFacts = facts && (facts.year || facts.medium || facts.dimensions || fac
 		align-items: start;
 	}
 
-	/* Desktop: the left column stays in view and scrolls on its own, so its
-	   bottom (comments) is reachable without scrolling past every image. */
+	/* Desktop: the left column scrolls with the page until its bottom is in
+	   view, then stays pinned while the images keep scrolling. --info-top is
+	   set by the script below (negative when the column is taller than the
+	   viewport), so the title bar scrolls away normally and the comments at
+	   the bottom are never cut off. */
 	.info-col {
 		position: sticky;
-		top: 24px;
-		max-height: calc(100dvh - var(--header-height-desktop) - 48px);
-		overflow-y: auto;
-		overscroll-behavior: contain;
+		top: var(--info-top, 24px);
 		padding: 24px;
-		scrollbar-color: var(--gray-2) transparent;
-		scrollbar-width: thin;
 	}
 
 	.facts {
@@ -284,8 +302,6 @@ const hasFacts = facts && (facts.year || facts.medium || facts.dimensions || fac
 
 		.info-col {
 			position: static;
-			max-height: none;
-			overflow: visible;
 			order: -1;
 			background: var(--tint-color);
 			border-radius: var(--radius-sm);
