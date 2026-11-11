@@ -22,10 +22,11 @@ const BAR_COLORS = [
 
 // `rank` is the project's 1-based position in the home page list (after sorting
 // by Order), not its Order value — so Order can be any number, including decimals.
-// With more projects than palette entries, the rainbow is stretched across them all.
+// The palette is spread across however many projects are showing, so the list
+// always runs the full rainbow from blue to purple.
 export function projectColor(rank: number, hueOverride?: number, total = BAR_COLORS.length): string {
 	const last = BAR_COLORS.length - 1;
-	const index = total <= BAR_COLORS.length ? rank - 1 : Math.round(((rank - 1) * last) / (total - 1));
+	const index = total > 1 ? Math.round(((rank - 1) * last) / (total - 1)) : 0;
 	const base = BAR_COLORS[Math.max(0, Math.min(last, index))];
 	if (hueOverride === undefined) return base;
 	const match = base.match(/oklch\(([\d.]+%) ([\d.]+) [\d.]+\)/);

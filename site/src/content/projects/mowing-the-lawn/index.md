@@ -3,6 +3,12 @@ title: "Mowing the Lawn"
 order: 10
 tags: [performance]
 status: "ready"
+year: "2013"
+medium: "Video, installation"
+dimensions: "6 min 45 sec"
+shown:
+  - "Art San Diego Art Fair, San Diego, CA (2013)"
+  - "L-Shape Gallery, California Institute of the Arts, Valencia, CA (2014)"
 overview: |-
   In Mowing the Lawn, a character mows a mound of artificial turf that periodically grows. The piece started as a performance that accompanied an image — in 2013, I created an edition of 100 screenprints of a person mowing a lawn, commissioned by Pelican Bomb. In my first year of graduate school at CalArts, I expanded the performance into a short video, shot in the high desert of Antelope Valley, CA. I used the piece to process some thoughts about property, work, motivation, futility, and the absurd — finding inspiration in Sisyphus, as well as the history of development in that landscape.
 credits:

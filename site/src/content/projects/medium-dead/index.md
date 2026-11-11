@@ -3,6 +3,10 @@ title: "Medium Dead"
 order: 3
 tags: [video]
 status: "ready"
+year: "2019–2023"
+medium: "Construction lumber, house paint, rope"
+shown:
+  - "East Market, Philadelphia, PA (2019)"
 overview: |-
   Medium Dead (2019–2023, East Market Building, Philadelphia, PA) is a series of sculptural tableaux featuring life-size figures modeled after push puppet toys. Made of construction lumber and durable house paint, these figures maintain their poses through an internal network of ropes, just like their tabletop antecedents.
 

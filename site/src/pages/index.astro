@@ -1,101 +1,59 @@
 ---
-import BaseHead from '../layouts/BaseHead.astro';
+import { getCollection } from 'astro:content';
+import AppShell from '../layouts/AppShell.astro';
+import ProjectBar from '../components/ProjectBar.astro';
+import UtilityBar from '../components/UtilityBar.astro';
+import Marquee from '../components/Marquee.astro';
+import TagFilterOverlay from '../components/TagFilterOverlay.astro';
+import SearchBox from '../components/SearchBox.astro';
+import { projectColor, GRAY } from '../lib/colors';
+
+// Only finished projects get a bar. "coming-soon" entries stay in the CMS, hidden, until switched to "ready".
+const projects = (await getCollection('projects', ({ data }) => data.status === 'ready')).sort(
+	(a, b) => a.data.order - b.data.order
+);
+const ranked = projects.map((project, i) => ({ project, rank: i + 1 }));
+const firstFour = ranked.slice(0, 4);
+const rest = ranked.slice(4);
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title="averylawrence.com" />
-	</head>
-	<body>
-		<div class="splash">
-			<p class="welcome">welcome to averylawrence.com</p>
-			<h1 class="headline">are you my grandmother?</h1>
-			<div class="buttons">
-				<a href="/grandmother" class="btn btn-yes">YES</a>
-				<a href="/home" class="btn btn-no">NO</a>
-			</div>
-			<a href="/home" class="skip">skip splash →</a>
-		</div>
-	</body>
-</html>
-
-<style is:global>
-	html,
-	body {
-		height: 100%;
-	}
-</style>
-
-<style>
-	.splash {
-		height: 100dvh;
-		background: #111111;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		position: relative;
-		padding: 40px;
-		box-sizing: border-box;
+<AppShell title="averylawrence.com" showToggle={true}>
+	{
+		firstFour.map(({ project, rank }) => (
+			<ProjectBar
+				title={project.data.title}
+				href={`/projects/${project.id}`}
+				color={projectColor(rank, project.data.hue ?? undefined, projects.length)}
+				tags={project.data.tags}
+				status={project.data.status}
+			/>
+		))
 	}
 
-	.welcome {
-		position: absolute;
-		top: 26px;
-		left: 0;
-		right: 0;
-		text-align: center;
-		font-family: var(--font-body);
-		font-size: 13px;
-		font-weight: 500;
-		color: rgb(255 255 255 / 35%);
-		letter-spacing: 0.3px;
-		margin: 0;
+	<Marquee text="INFO" href="/info" />
+
+	{
+		rest.map(({ project, rank }) => (
+			<ProjectBar
+				title={project.data.title}
+				href={`/projects/${project.id}`}
+				color={projectColor(rank, project.data.hue ?? undefined, projects.length)}
+				tags={project.data.tags}
+				status={project.data.status}
+			/>
+		))
 	}
 
-	.headline {
-		font-family: var(--font-heading);
-		font-weight: 800;
-		font-size: 36px;
-		color: var(--color-white);
-		text-align: center;
-		line-height: 1.2;
-		max-width: 600px;
-		margin: 0 0 24px;
-	}
+	<Marquee text="SHOP" href="/shop" />
 
-	.buttons {
-		display: flex;
-		gap: 16px;
-	}
+	<UtilityBar title="teaching" href="/teaching" color={GRAY.teaching} />
+	<UtilityBar title="resumes/statements/etc." href="/resumes" color={GRAY.resumes} />
+	<UtilityBar title="project management" href="/project-management" color={GRAY.projectManagement} />
+	<UtilityBar title="bloopers" href="/bloopers" color={GRAY.bloopers} />
 
-	.btn {
-		font-family: var(--font-heading);
-		font-weight: 700;
-		font-size: 16px;
-		padding: 12px 32px;
-		border-radius: var(--radius-sm);
-		text-decoration: none;
-	}
+	<Marquee text="NEWS" href="/news" />
 
-	.btn-yes {
-		background: var(--color-white);
-		color: var(--color-black);
-	}
+	<SearchBox />
 
-	.btn-no {
-		background: transparent;
-		color: var(--color-white);
-		border: 2px solid var(--color-white);
-	}
-
-	.skip {
-		position: absolute;
-		bottom: 22px;
-		right: 26px;
-		font-family: var(--font-body);
-		font-size: 12px;
-		color: rgb(255 255 255 / 45%);
-		text-decoration: none;
-	}
-</style>
+	<TagFilterOverlay slot="overlay" />
+</AppShell>

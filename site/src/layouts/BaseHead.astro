@@ -4,15 +4,45 @@ import { ClientRouter } from 'astro:transitions';
 
 interface Props {
 	title: string;
+	/** Shown in search results and link previews. Falls back to the site description. */
+	description?: string | null;
+	/** Site-relative or absolute URL of the link-preview image. Falls back to the color-bar image. */
+	image?: string | null;
 }
-const { title } = Astro.props;
+const { title, description, image } = Astro.props;
+
+const SITE_NAME = 'Avery Lawrence';
+const DEFAULT_DESCRIPTION =
+	'Avery Lawrence is an artist working in video, performance, sculpture, animation, and installation.';
+
+// One tidy sentence-ish blurb: collapse whitespace and cap the length previews actually show.
+const clean = (description ?? DEFAULT_DESCRIPTION).replace(/\s+/g, ' ').trim();
+const blurb = clean.length > 200 ? `${clean.slice(0, 197).replace(/\s+\S*$/, '')}…` : clean;
+const imageUrl = new URL(image ?? '/og-default.png', Astro.site).href;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta name="generator" content={Astro.generator} />
 <title>{title}</title>
+<meta name="description" content={blurb} />
+<link rel="canonical" href={pageUrl} />
+
+<!-- Link previews (Open Graph is read by iMessage, Slack, email clients, LinkedIn, etc.) -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={blurb} />
+<meta property="og:url" content={pageUrl} />
+<meta property="og:image" content={imageUrl} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={blurb} />
+<meta name="twitter:image" content={imageUrl} />
 <ClientRouter />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />

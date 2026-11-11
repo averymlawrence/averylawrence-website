@@ -52,6 +52,14 @@ collections:
         value_type: int
         required: false
         hint: 'Optional. Leave blank to use the automatic rainbow color; enter 0-360 to pick a hue by hand.'
+      - { label: Year, name: year, widget: string, required: false, hint: 'e.g. 2024 or 2019–2023. Shown in the facts line at the top of the project page.' }
+      - { label: Medium, name: medium, widget: string, required: false, hint: 'e.g. Wood, rope, metal, electric motor' }
+      - { label: Size or duration, name: dimensions, widget: string, required: false, hint: 'e.g. 4 × 5 ft, or 6 min 45 sec' }
+      - label: Shown at
+        name: shown
+        widget: list
+        required: false
+        hint: 'One entry per exhibition or screening, e.g. "Novella Gallery, Philadelphia, PA (2023)"'
       - { label: Overview, name: overview, widget: text, required: false, hint: 'The project description shown beside the images.' }
       - label: Who helped
         name: credits

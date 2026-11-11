@@ -31,7 +31,7 @@ Tokens expire (yours was created with an expiration date). To make a new one:
 
 - Every **Save** in the CMS is published immediately. There is no draft step.
 - The live site rebuilds itself after each save and updates in about **2–3 minutes**.
-- To work on something without showing it, set a project's **Status** to `coming-soon` (see below). The bar still appears on the home page, but the page shows a placeholder instead of your content.
+- To work on something without showing it, set a project's **Status** to `coming-soon` (see below). The project is hidden from the site completely — no bar, no page — until you switch it to `ready`.
 - If the site hasn't changed after 5 minutes, see [Troubleshooting](#8-troubleshooting).
 
 ---
@@ -44,10 +44,14 @@ Tokens expire (yours was created with an expiration date). To make a new one:
 | Field | What to enter |
 |---|---|
 | **Title** | The project name. This is the text on the home page bar and the page heading. It also becomes the web address (`/projects/your-title`). |
-| **Order** | A number that sorts the home page list, smallest first. Decimals work: `0.5` puts a project above the current first one, `4.5` puts it between 4 and 5. Colors are assigned by position automatically, so the rainbow stays in order. The first four projects sit above the INFO bar. |
+| **Order** | A number that sorts the home page list, smallest first. Decimals work: `0.5` puts a project above the current first one, `4.5` puts it between 4 and 5. Colors are assigned by position automatically, so the rainbow always runs blue to purple across whatever is showing. The first four visible projects sit above the INFO bar. |
 | **Tags** | One or more of performance / animation / video / installation / photo. These drive the "filter by tag" menu. |
-| **Status** | `coming-soon` while you're still loading content; `ready` to show it. |
+| **Status** | `coming-soon` keeps the project hidden while you load content; `ready` puts its bar on the home page. |
 | **Hue override** | Leave blank. (Only for hand-picking a bar color: a number 0–360.) |
+| **Year** | e.g. `2024` or `2019–2023`. Year, Medium, Size or duration, and Shown at make up the facts line at the top of the project page. All four are optional; blank ones don't appear. |
+| **Medium** | e.g. `Wood, rope, metal, electric motor`. |
+| **Size or duration** | e.g. `4 × 5 ft` or `6 min 45 sec`. |
+| **Shown at** | Click **Add** once per exhibition or screening, e.g. `Novella Gallery, Philadelphia, PA (2023)`. |
 | **Overview** | The project description. Shown beside the images on desktop, above them on phones. Blank lines make new paragraphs. |
 | **Who helped** | Click **Add** once per person. Free text, e.g. `Ross McDermott — direction, camera, editing`. |
 | **Video path / Video caption** | Leave blank. Video can't be uploaded through the CMS yet — ask Claude. |
@@ -82,7 +86,8 @@ Drag the items to reorder them. The order here is the order on the page.
 
 Good to know:
 
-- Turning a `coming-soon` project into a real page is just: add images and overview, set **Status** to `ready`, Save.
+- Nine projects are loaded but hidden as `coming-soon` (Can't Shake It, Moving a Tree, Arranging Suitcases, ourhole.com, Dancing, Soft Belly, Head Shot, Live in Santa Clarita, Live in Jacksonville). To publish one: add images and overview, set **Status** to `ready`, Save.
+- The first image in the list is also the picture that shows when you share the project's link (text message, email, Slack).
 - Changing the **Title** changes the bar text and heading. The web address stays the same.
 - **Deleting** a project removes its page and its images from the site.
 

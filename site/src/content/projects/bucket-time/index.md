@@ -3,6 +3,11 @@ title: "Bucket Time"
 order: 17
 tags: [installation, performance]
 status: "ready"
+year: "2016"
+medium: "Performance"
+dimensions: "13 consecutive weekends"
+shown:
+  - "“A Building with a View”: Experiments in Anarchitecture, Contemporary Arts Center, New Orleans, LA (2016)"
 overview: |-
   Bucket Time is a series of performances I did at the Contemporary Arts Center in New Orleans, LA as part of the group show "A Building With a View": Experiments in Anarchitecture, curated by Andrea Andersson — a series of weekly live performances during Open Call. In bucket time, I address an audience while holding a headstand, my head in a bucket, a hole revealing my mouth. In this position, the body above the bucket begins to separate from the isolated mouth that talks, sings, and recites from within the bucket. Some of the performances re-stage extant mouth-focused works (Samuel Beckett's "Not I", Vito Acconci's "Open Book", a minstrel show "stump speech" by Slim Williams); some are new. All of them are a tipping over and pouring out of ideas, experiences, feelings, and memories.
 credits:

@@ -3,6 +3,10 @@ title: "The Shoveler"
 order: 1
 tags: [video]
 status: "ready"
+year: "2024"
+medium: "Wood, rope, metal, electric motor"
+shown:
+  - "World of Winter, Calder Plaza, Grand Rapids, MI (2024)"
 overview: |-
   An intermittently kinetic life-size push puppet on a plinth with a shovel and a pile of snow. It is part of the Medium Dead series. The sculpture was first exhibited at the World of Winter Festival in Grand Rapids, MI from January 12 - March 10, 2024.
 credits:

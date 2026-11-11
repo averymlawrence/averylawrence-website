@@ -5,11 +5,13 @@ interface Props {
 	title: string;
 	color: string;
 	tag?: string;
+	description?: string | null;
+	image?: string | null;
 }
-const { title, color, tag } = Astro.props;
+const { title, color, tag, description, image } = Astro.props;
 ---
 
-<AppShell title={`${title} — averylawrence.com`}>
+<AppShell title={`${title} — averylawrence.com`} description={description} image={image}>
 	<div class="title-bar" style={`background-color: ${color}`}>
 		<span class="title-bar-spacer"></span>
 		<span class="title-bar-title">{title}</span>

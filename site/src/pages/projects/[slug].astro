@@ -1,12 +1,16 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import ProjectLayout from '../../layouts/ProjectLayout.astro';
 import ProjectBody from '../../components/ProjectBody.astro';
 import Comments from '../../components/Comments.astro';
 import { projectColor, projectColorTint } from '../../lib/colors';
 
 export async function getStaticPaths() {
-	const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+	// "coming-soon" projects have no page until they're switched to "ready" in the CMS.
+	const projects = (await getCollection('projects', ({ data }) => data.status === 'ready')).sort(
+		(a, b) => a.data.order - b.data.order
+	);
 	return projects.map((project, i) => ({
 		params: { slug: project.id },
 		props: { project, rank: i + 1, total: projects.length },
@@ -14,39 +18,26 @@ export async function getStaticPaths() {
 }
 
 const { project, rank, total } = Astro.props;
-const { title, tags, status, overview, credits, video, video_caption, images, comments } = project.data;
+const { title, tags, overview, credits, video, video_caption, images, comments } = project.data;
+const { year, medium, dimensions, shown } = project.data;
 const hue = project.data.hue ?? undefined;
 const color = projectColor(rank, hue, total);
 const tint = projectColorTint(rank, hue, total);
+
+// Link preview: the project's first image (as a JPEG, which every preview service reads).
+const preview = images[0] ? (await getImage({ src: images[0].src, width: 1200, format: 'jpg' })).src : null;
 ---
 
-<ProjectLayout title={title} color={color} tag={tags[0]}>
-	{
-		status === 'coming-soon' ? (
-			<div class="coming-soon">
-				<p>More on this project soon.</p>
-			</div>
-		) : (
-			<ProjectBody
-				overview={overview}
-				credits={credits}
-				tags={tags}
-				video={video}
-				videoCaption={video_caption}
-				images={images}
-				tintColor={tint}
-			/>
-		)
-	}
-	{status === 'ready' && comments.length > 0 && <Comments comments={comments} />}
+<ProjectLayout title={title} color={color} tag={tags[0]} description={overview} image={preview}>
+	<ProjectBody
+		facts={{ year: year != null ? String(year) : null, medium, dimensions, shown }}
+		overview={overview}
+		credits={credits}
+		tags={tags}
+		video={video}
+		videoCaption={video_caption}
+		images={images}
+		tintColor={tint}
+	/>
+	{comments.length > 0 && <Comments comments={comments} />}
 </ProjectLayout>
-
-<style>
-	.coming-soon {
-		padding: 80px 16px;
-		text-align: center;
-		font-family: var(--font-body);
-		font-size: 16px;
-		color: #444;
-	}
-</style>

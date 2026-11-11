@@ -1,56 +1,17 @@
 ---
-import { getCollection } from 'astro:content';
-import AppShell from '../layouts/AppShell.astro';
-import ProjectBar from '../components/ProjectBar.astro';
-import UtilityBar from '../components/UtilityBar.astro';
-import Marquee from '../components/Marquee.astro';
-import TagFilterOverlay from '../components/TagFilterOverlay.astro';
-import SearchBox from '../components/SearchBox.astro';
-import { projectColor, GRAY } from '../lib/colors';
-
-const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const ranked = projects.map((project, i) => ({ project, rank: i + 1 }));
-const firstFour = ranked.slice(0, 4);
-const rest = ranked.slice(4);
+// The home page used to live at /home (behind a splash page at the root).
+// It's at / now; this keeps old links working.
 ---
 
-<AppShell title="averylawrence.com" showToggle={true}>
-	{
-		firstFour.map(({ project, rank }) => (
-			<ProjectBar
-				title={project.data.title}
-				href={`/projects/${project.id}`}
-				color={projectColor(rank, project.data.hue ?? undefined, projects.length)}
-				tags={project.data.tags}
-				status={project.data.status}
-			/>
-		))
-	}
-
-	<Marquee text="INFO" href="/info" />
-
-	{
-		rest.map(({ project, rank }) => (
-			<ProjectBar
-				title={project.data.title}
-				href={`/projects/${project.id}`}
-				color={projectColor(rank, project.data.hue ?? undefined, projects.length)}
-				tags={project.data.tags}
-				status={project.data.status}
-			/>
-		))
-	}
-
-	<Marquee text="SHOP" href="/shop" />
-
-	<UtilityBar title="teaching" href="/teaching" color={GRAY.teaching} />
-	<UtilityBar title="resumes/statements/etc." href="/resumes" color={GRAY.resumes} />
-	<UtilityBar title="project management" href="/project-management" color={GRAY.projectManagement} />
-	<UtilityBar title="bloopers" href="/bloopers" color={GRAY.bloopers} />
-
-	<Marquee text="NEWS" href="/news" />
-
-	<SearchBox />
-
-	<TagFilterOverlay slot="overlay" />
-</AppShell>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>averylawrence.com</title>
+		<meta http-equiv="refresh" content="0; url=/" />
+		<link rel="canonical" href="https://averylawrence.com/" />
+		<meta name="robots" content="noindex" />
+	</head>
+	<body data-pagefind-ignore>
+		<a href="/">averylawrence.com</a>
+	</body>
+</html>

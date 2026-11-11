@@ -8,7 +8,15 @@ interface ImageEntry {
 	caption: string;
 }
 
+interface Facts {
+	year?: string | null;
+	medium?: string | null;
+	dimensions?: string | null;
+	shown: string[];
+}
+
 interface Props {
+	facts?: Facts;
 	overview?: string | null;
 	credits: string[];
 	tags: string[];
@@ -17,12 +25,47 @@ interface Props {
 	images: ImageEntry[];
 	tintColor: string;
 }
-const { overview, credits, tags, video, videoCaption, images, tintColor } = Astro.props;
+const { facts, overview, credits, tags, video, videoCaption, images, tintColor } = Astro.props;
+const hasFacts = facts && (facts.year || facts.medium || facts.dimensions || facts.shown.length > 0);
 ---
 
 <div class="project-body" style={`--tint-color: ${tintColor}`}>
 	<div class="info-col">
 		<slot name="info" />
+		{
+			hasFacts && (
+				<dl class="facts">
+					{facts.year && (
+						<div>
+							<dt>Year</dt>
+							<dd>{facts.year}</dd>
+						</div>
+					)}
+					{facts.medium && (
+						<div>
+							<dt>Medium</dt>
+							<dd>{facts.medium}</dd>
+						</div>
+					)}
+					{facts.dimensions && (
+						<div>
+							<dt>Size / duration</dt>
+							<dd>{facts.dimensions}</dd>
+						</div>
+					)}
+					{facts.shown.length > 0 && (
+						<div>
+							<dt>Shown at</dt>
+							<dd>
+								{facts.shown.map((s) => (
+									<span class="shown-item">{s}</span>
+								))}
+							</dd>
+						</div>
+					)}
+				</dl>
+			)
+		}
 		{overview && <p class="overview">{overview}</p>}
 		{
 			credits.length > 0 && (
@@ -90,6 +133,35 @@ const { overview, credits, tags, video, videoCaption, images, tintColor } = Astr
 		position: sticky;
 		top: 24px;
 		padding: 24px;
+	}
+
+	.facts {
+		margin: 0 0 20px;
+		padding-bottom: 16px;
+		border-bottom: 1px solid var(--color-black);
+		font-family: var(--font-body);
+		font-size: 13.5px;
+		line-height: 1.5;
+		display: grid;
+		gap: 4px;
+	}
+
+	.facts div {
+		display: grid;
+		grid-template-columns: 110px 1fr;
+		gap: 12px;
+	}
+
+	.facts dt {
+		font-weight: 600;
+	}
+
+	.facts dd {
+		margin: 0;
+	}
+
+	.shown-item {
+		display: block;
 	}
 
 	.overview {

@@ -3,6 +3,9 @@ title: "Team Photo"
 order: 4
 tags: [photo]
 status: "ready"
+year: "2018"
+shown:
+  - "Art in Odd Places: Matter, Charlottesville, VA (2018)"
 overview: |-
   In 2018, I collaborated with The Garage art space to create Team Photo. The project was featured in the Charlottesville, VA edition of Ed Woodham's Art in Odd Places. One year after the white supremacist "Unite the Right Rally," I invited community members to come together to play soccer, have a picnic dinner, and pose for a really wide team portrait. With this project, an artwork created space for play and togetherness in a community that had recently suffered a nationally-broadcast trauma.
 

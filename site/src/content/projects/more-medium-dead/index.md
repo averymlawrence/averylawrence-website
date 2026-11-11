@@ -3,6 +3,9 @@ title: "More Medium Dead"
 order: 2
 tags: [video]
 status: "ready"
+year: "2023"
+shown:
+  - "Novella Gallery, Philadelphia, PA, curated by Franco Andrés Rodriguez (2023)"
 overview: |-
   See Medium Dead for an introduction to the overall project. In More Medium Dead, viewers experience the sculptures in a gallery, and I extend the push-puppet visual language into other art objects. When fabricating the original Medium Dead installation, I used the formal logic of the push puppet (segmentation, roundedness, reduction) to guide the design of associated objects — a dining set, a potted plant, Amazon boxes, and a street light. In More Medium Dead, I consider that logic's influence on two-dimensional images. Animated cartoons also segment, round, and reduce the world. I borrow the animation techniques "big ball of violence" (also "fight cloud") and smear frame to inform two series of paintings. The Big Ball paintings agglomerate the push puppet segments into a spherical mass. The Moving Flower series uses frame animation and the smear technique to present a floral version of the push puppet's erect-collapse cycle.
 

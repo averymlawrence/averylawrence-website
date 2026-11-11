@@ -11,6 +11,11 @@ const projects = defineCollection({
 			status: z.enum(['ready', 'coming-soon']).default('coming-soon'),
 			// The CMS saves untouched optional fields as null, so accept null as "not set".
 			hue: z.number().nullish(),
+			// Facts line shown at the top of the project page.
+			year: z.union([z.string(), z.number()]).nullish(),
+			medium: z.string().nullish(),
+			dimensions: z.string().nullish(),
+			shown: z.array(z.string()).default([]),
 			overview: z.string().nullish(),
 			credits: z.array(z.string()).default([]),
 			video: z.string().nullish(),
