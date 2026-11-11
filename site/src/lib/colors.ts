@@ -1,4 +1,4 @@
-// Placeholder rainbow palette from the design handoff's BARS array, keyed by project `order` (1-17).
+// Placeholder rainbow palette from the design handoff's BARS array, indexed by a project's position in the home page list.
 // Colors are explicitly called out as placeholder/adjustable in the handoff README.
 const BAR_COLORS = [
 	'oklch(66% 0.14 250)',
@@ -20,8 +20,13 @@ const BAR_COLORS = [
 	'oklch(66% 0.16 305)',
 ];
 
-export function projectColor(order: number, hueOverride?: number): string {
-	const base = BAR_COLORS[order - 1] ?? 'oklch(70% 0.15 250)';
+// `rank` is the project's 1-based position in the home page list (after sorting
+// by Order), not its Order value — so Order can be any number, including decimals.
+// With more projects than palette entries, the rainbow is stretched across them all.
+export function projectColor(rank: number, hueOverride?: number, total = BAR_COLORS.length): string {
+	const last = BAR_COLORS.length - 1;
+	const index = total <= BAR_COLORS.length ? rank - 1 : Math.round(((rank - 1) * last) / (total - 1));
+	const base = BAR_COLORS[Math.max(0, Math.min(last, index))];
 	if (hueOverride === undefined) return base;
 	const match = base.match(/oklch\(([\d.]+%) ([\d.]+) [\d.]+\)/);
 	if (!match) return base;
@@ -30,8 +35,8 @@ export function projectColor(order: number, hueOverride?: number): string {
 
 // Light tint of a project's bar color, used as the background behind its
 // overview/credits block on mobile project pages.
-export function projectColorTint(order: number, hueOverride?: number): string {
-	const base = projectColor(order, hueOverride);
+export function projectColorTint(rank: number, hueOverride?: number, total?: number): string {
+	const base = projectColor(rank, hueOverride, total);
 	const match = base.match(/oklch\([\d.]+% [\d.]+ ([\d.]+)\)/);
 	const hue = match ? match[1] : '250';
 	return `oklch(94% 0.03 ${hue})`;

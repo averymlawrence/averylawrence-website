@@ -2,20 +2,22 @@
 import { getCollection } from 'astro:content';
 import ProjectLayout from '../../layouts/ProjectLayout.astro';
 import ProjectBody from '../../components/ProjectBody.astro';
+import Comments from '../../components/Comments.astro';
 import { projectColor, projectColorTint } from '../../lib/colors';
 
 export async function getStaticPaths() {
-	const projects = await getCollection('projects');
-	return projects.map((project) => ({
+	const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+	return projects.map((project, i) => ({
 		params: { slug: project.id },
-		props: { project },
+		props: { project, rank: i + 1, total: projects.length },
 	}));
 }
 
-const { project } = Astro.props;
-const { title, order, tags, status, hue, overview, credits, body, video, images } = project.data;
-const color = projectColor(order, hue);
-const tint = projectColorTint(order, hue);
+const { project, rank, total } = Astro.props;
+const { title, tags, status, overview, credits, video, video_caption, images, comments } = project.data;
+const hue = project.data.hue ?? undefined;
+const color = projectColor(rank, hue, total);
+const tint = projectColorTint(rank, hue, total);
 ---
 
 <ProjectLayout title={title} color={color} tag={tags[0]}>
@@ -30,12 +32,13 @@ const tint = projectColorTint(order, hue);
 				credits={credits}
 				tags={tags}
 				video={video}
-				body={body}
+				videoCaption={video_caption}
 				images={images}
 				tintColor={tint}
 			/>
 		)
 	}
+	{status === 'ready' && comments.length > 0 && <Comments comments={comments} />}
 </ProjectLayout>
 
 <style>

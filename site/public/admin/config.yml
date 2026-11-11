@@ -1,17 +1,18 @@
 # yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+#
+# Sveltia CMS configuration for averylawrence.com/admin.
+# How-to for Avery: see CMS-GUIDE.md at the top of this repository.
 backend:
   name: github
   repo: averymlawrence/averylawrence-website
   branch: main
-  # base_url points at the OAuth proxy (a Cloudflare Worker running sveltia-cms-auth).
-  # Replace this once the Worker is deployed — see Website 2026/00_design or ask Claude.
-  base_url: https://REPLACE-WITH-YOUR-CLOUDFLARE-WORKER-URL.workers.dev
 
 site_url: https://averylawrence.com
 logo_url: /favicon.svg
 
-# Fallback for any collection that doesn't set its own — projects/news below
-# override this with a per-entry folder instead.
+# Fallback upload location. Projects and News don't use it: each entry lives in
+# its own folder (path: '{{slug}}/index') and its images are stored right
+# beside it, which is what the site build expects.
 media_folder: site/public/media
 public_folder: /media
 
@@ -20,47 +21,81 @@ collections:
     label: Projects
     label_singular: Project
     folder: site/src/content/projects
-    media_folder: '{{slug}}'
-    public_folder: '/{{slug}}'
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
     slug: '{{title}}'
+    summary: '{{order}} — {{title}} ({{status}})'
+    sortable_fields: [order, title]
     fields:
       - { label: Title, name: title, widget: string }
-      - { label: Order, name: order, widget: number, hint: 'Position in the home page bar list (1-17)' }
+      - label: Order
+        name: order
+        widget: number
+        value_type: float
+        hint: 'Sorts the home page bar list, smallest first. Any number works, decimals too: 0.5 goes above 1, 4.5 goes between 4 and 5. Bar colors follow the resulting position.'
       - label: Tags
         name: tags
         widget: select
         multiple: true
+        required: false
         options: [performance, animation, video, installation, photo]
       - label: Status
         name: status
         widget: select
         options: [ready, coming-soon]
         default: coming-soon
-      - { label: Hue override, name: hue, widget: number, required: false, hint: 'Optional — overrides the default bar color hue (0-360)' }
-      - { label: Overview, name: overview, widget: text, required: false }
-      - label: Credits
+        hint: '"coming-soon" shows the bar with a placeholder page. Switch to "ready" once images and text are in.'
+      - label: Hue override
+        name: hue
+        widget: number
+        value_type: int
+        required: false
+        hint: 'Optional. Leave blank to use the automatic rainbow color; enter 0-360 to pick a hue by hand.'
+      - { label: Overview, name: overview, widget: text, required: false, hint: 'The project description shown beside the images.' }
+      - label: Who helped
         name: credits
         widget: list
         required: false
         hint: 'One entry per person, e.g. "Ross McDermott — direction, camera, editing"'
-      - { label: Video path, name: video, widget: string, required: false, hint: 'Only for projects with an actual video file, e.g. /media/the-weather/clip.mp4' }
-      - { label: Video caption, name: body, widget: text, required: false }
+      - label: Video path
+        name: video
+        widget: string
+        required: false
+        hint: 'Rarely needed. Only for a video file already in the site, e.g. /media/the-weather/clip.mp4'
+      - { label: Video caption, name: video_caption, widget: text, required: false }
       - label: Images
         name: images
         widget: list
         required: false
+        summary: '{{alt}}'
         fields:
           - { label: Image, name: src, widget: image }
-          - { label: Alt text, name: alt, widget: string, hint: 'Short, for screen readers' }
-          - { label: Image description, name: caption, widget: text, hint: 'Long-form description' }
+          - { label: Alt text, name: alt, widget: string, hint: 'Short (about 20 words). Read aloud by screen readers.' }
+          - { label: Image description, name: caption, widget: text, required: false, hint: 'Long description (about 200 words). Shown under "image description".' }
+      - label: Comments
+        name: comments
+        widget: list
+        required: false
+        summary: '{{name}}: {{text}}'
+        hint: 'The fake comment thread shown at the bottom of the project page. Leave empty for no comments section.'
+        fields:
+          - { label: Commenter name, name: name, widget: string }
+          - { label: Comment, name: text, widget: text }
+          - { label: Thumbs up, name: likes, widget: number, value_type: int, required: false }
+          - { label: Thumbs down, name: dislikes, widget: number, value_type: int, required: false }
+          - { label: When, name: when, widget: string, required: false, hint: 'Free text, e.g. "3 years ago"' }
+          - { label: Is a reply, name: reply, widget: boolean, default: false, hint: 'Indents the comment under the one above it.' }
 
   - name: news
     label: News
     label_singular: Post
     folder: site/src/content/news
-    media_folder: '{{slug}}'
-    public_folder: '/{{slug}}'
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    summary: '{{date}} — {{title}}'
     fields:
       - { label: Title, name: title, widget: string }
       - { label: Date, name: date, widget: datetime }
@@ -68,8 +103,9 @@ collections:
         name: images
         widget: list
         required: false
+        summary: '{{alt}}'
         fields:
           - { label: Image, name: src, widget: image }
           - { label: Alt text, name: alt, widget: string }
-          - { label: Image description, name: caption, widget: text }
+          - { label: Image description, name: caption, widget: text, required: false }
       - { label: Body, name: body, widget: markdown, required: false }

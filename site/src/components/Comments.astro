@@ -1,0 +1,186 @@
+---
+// A deliberately fake comment thread. Every comment is written by Avery in the
+// CMS ("Comments" on a project) — nothing here is user-submitted or generated.
+interface Comment {
+	name: string;
+	text: string;
+	likes?: number | null;
+	dislikes?: number | null;
+	when?: string | null;
+	reply: boolean;
+}
+
+interface Props {
+	comments: Comment[];
+}
+const { comments } = Astro.props;
+
+// Stable avatar color per commenter name, so the same "person" keeps their color.
+function avatarHue(name: string): number {
+	let hash = 0;
+	for (const ch of name) hash = (hash * 31 + ch.codePointAt(0)!) % 360;
+	return hash;
+}
+
+const count = comments.length;
+---
+
+<section class="comments" aria-labelledby="comments-heading">
+	<h2 id="comments-heading">{count} {count === 1 ? 'Comment' : 'Comments'}</h2>
+	<ol class="comment-list">
+		{
+			comments.map((c) => (
+				<li class:list={['comment', { 'is-reply': c.reply }]}>
+					<span class="avatar" style={`background: oklch(72% 0.13 ${avatarHue(c.name)})`} aria-hidden="true">
+						{c.name.trim().charAt(0).toUpperCase()}
+					</span>
+					<div class="comment-main">
+						<p class="comment-meta">
+							<span class="comment-name">{c.name}</span>
+							{c.when && <span class="comment-when">{c.when}</span>}
+						</p>
+						<p class="comment-text">{c.text}</p>
+						{(c.likes != null || c.dislikes != null) && (
+							<p class="comment-votes">
+								{c.likes != null && (
+									<span class="vote">
+										<svg viewBox="0 0 24 24" aria-hidden="true">
+											<path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
+										</svg>
+										<span class="sr-only">Likes:</span>
+										{c.likes}
+									</span>
+								)}
+								{c.dislikes != null && (
+									<span class="vote">
+										<svg viewBox="0 0 24 24" aria-hidden="true" class="down">
+											<path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
+										</svg>
+										<span class="sr-only">Dislikes:</span>
+										{c.dislikes}
+									</span>
+								)}
+							</p>
+						)}
+					</div>
+				</li>
+			))
+		}
+	</ol>
+</section>
+
+<style>
+	.comments {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 8px 16px 72px;
+	}
+
+	.comments h2 {
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 20px;
+		margin: 0 0 20px;
+		padding-top: 24px;
+		border-top: 1px solid var(--color-black);
+	}
+
+	.comment-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		max-width: 760px;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.comment {
+		display: flex;
+		gap: 12px;
+	}
+
+	.comment.is-reply {
+		margin-left: 52px;
+	}
+
+	.avatar {
+		flex: none;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 18px;
+		color: var(--color-black);
+	}
+
+	.is-reply .avatar {
+		width: 28px;
+		height: 28px;
+		font-size: 13px;
+	}
+
+	.comment-main {
+		min-width: 0;
+		font-family: var(--font-body);
+	}
+
+	.comment-main p {
+		margin: 0;
+	}
+
+	.comment-meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 8px;
+	}
+
+	.comment-name {
+		font-weight: 600;
+		font-size: 13.5px;
+	}
+
+	.comment-when {
+		font-size: 12px;
+		color: #666;
+	}
+
+	.comment-text {
+		font-size: 14.5px;
+		line-height: 1.5;
+		margin-top: 2px !important;
+		white-space: pre-line;
+		overflow-wrap: anywhere;
+	}
+
+	.comment-votes {
+		display: flex;
+		gap: 16px;
+		margin-top: 6px !important;
+		font-size: 12.5px;
+		color: #555;
+	}
+
+	.vote {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+	}
+
+	.vote svg {
+		width: 15px;
+		height: 15px;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.6;
+	}
+
+	.vote svg.down {
+		transform: rotate(180deg);
+	}
+</style>

@@ -9,19 +9,20 @@ interface ImageEntry {
 }
 
 interface Props {
-	overview?: string;
+	overview?: string | null;
 	credits: string[];
 	tags: string[];
-	video?: string;
-	body?: string;
+	video?: string | null;
+	videoCaption?: string | null;
 	images: ImageEntry[];
 	tintColor: string;
 }
-const { overview, credits, tags, video, body, images, tintColor } = Astro.props;
+const { overview, credits, tags, video, videoCaption, images, tintColor } = Astro.props;
 ---
 
 <div class="project-body" style={`--tint-color: ${tintColor}`}>
 	<div class="info-col">
+		<slot name="info" />
 		{overview && <p class="overview">{overview}</p>}
 		{
 			credits.length > 0 && (
@@ -50,7 +51,7 @@ const { overview, credits, tags, video, body, images, tintColor } = Astro.props;
 			video && (
 				<figure class="media-item">
 					<video src={video} controls playsinline />
-					{body && <figcaption>{body}</figcaption>}
+					{videoCaption && <figcaption>{videoCaption}</figcaption>}
 				</figure>
 			)
 		}
@@ -60,10 +61,12 @@ const { overview, credits, tags, video, body, images, tintColor } = Astro.props;
 					<button class="media-trigger" data-lightbox-trigger data-alt={img.alt} data-caption={img.caption}>
 						<Image src={img.src} alt={img.alt} widths={[400, 800, 1200]} sizes="(max-width: 900px) 100vw, 55vw" />
 					</button>
-					<details class="img-desc">
-						<summary>image description</summary>
-						<p>{img.caption}</p>
-					</details>
+					{img.caption && (
+						<details class="img-desc">
+							<summary>image description</summary>
+							<p>{img.caption}</p>
+						</details>
+					)}
 				</figure>
 			))
 		}
@@ -94,6 +97,16 @@ const { overview, credits, tags, video, body, images, tintColor } = Astro.props;
 		font-size: 15px;
 		line-height: 1.6;
 		white-space: pre-line;
+	}
+
+	.info-col :global(.prose) {
+		font-family: var(--font-body);
+		font-size: 15px;
+		line-height: 1.6;
+	}
+
+	.info-col :global(.prose > :first-child) {
+		margin-top: 0;
 	}
 
 	.credits h3,

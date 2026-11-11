@@ -5,13 +5,14 @@ interface Props {
 }
 const { text, href } = Astro.props;
 const Tag = href ? 'a' : 'div';
-const repeated = Array.from({ length: 40 }, () => text).join(' · ');
+// Each word is its own evenly-spaced item, rendered twice over, so the
+// -50% loop point lands on an identical frame and the seam is invisible.
+const words = Array.from({ length: 80 }, () => text);
 ---
 
-<Tag class="aw-marquee-wrap" {...(href ? { href } : {})}>
-	<div class="aw-marquee-track">
-		<span class="aw-marquee-item">{repeated}</span>
-		<span class="aw-marquee-item">{repeated}</span>
+<Tag class="aw-marquee-wrap" aria-label={text} {...(href ? { href } : {})}>
+	<div class="aw-marquee-track" aria-hidden="true">
+		{words.map((word) => <span class="aw-marquee-item">{word}</span>)}
 	</div>
 </Tag>
 
@@ -41,7 +42,7 @@ const repeated = Array.from({ length: 40 }, () => text).join(' · ');
 		font-size: 34px;
 		color: var(--color-white);
 		letter-spacing: 1px;
-		padding: 0 18px;
+		padding: 0 0.16em;
 		transition: color 0.15s ease;
 	}
 

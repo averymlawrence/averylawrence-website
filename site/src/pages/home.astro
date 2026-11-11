@@ -9,17 +9,18 @@ import SearchBox from '../components/SearchBox.astro';
 import { projectColor, GRAY } from '../lib/colors';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const firstFour = projects.filter((p) => p.data.order <= 4);
-const rest = projects.filter((p) => p.data.order > 4);
+const ranked = projects.map((project, i) => ({ project, rank: i + 1 }));
+const firstFour = ranked.slice(0, 4);
+const rest = ranked.slice(4);
 ---
 
 <AppShell title="averylawrence.com" showToggle={true}>
 	{
-		firstFour.map((project) => (
+		firstFour.map(({ project, rank }) => (
 			<ProjectBar
 				title={project.data.title}
 				href={`/projects/${project.id}`}
-				color={projectColor(project.data.order, project.data.hue)}
+				color={projectColor(rank, project.data.hue ?? undefined, projects.length)}
 				tags={project.data.tags}
 				status={project.data.status}
 			/>
@@ -29,11 +30,11 @@ const rest = projects.filter((p) => p.data.order > 4);
 	<Marquee text="INFO" href="/info" />
 
 	{
-		rest.map((project) => (
+		rest.map(({ project, rank }) => (
 			<ProjectBar
 				title={project.data.title}
 				href={`/projects/${project.id}`}
-				color={projectColor(project.data.order, project.data.hue)}
+				color={projectColor(rank, project.data.hue ?? undefined, projects.length)}
 				tags={project.data.tags}
 				status={project.data.status}
 			/>

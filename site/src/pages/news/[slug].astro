@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import ProjectLayout from '../../layouts/ProjectLayout.astro';
 import ProjectBody from '../../components/ProjectBody.astro';
 import { GRAY } from '../../lib/colors';
@@ -13,13 +13,16 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { title, date, body, images } = post.data;
+const { title, date, images } = post.data;
+const { Content } = await render(post);
 const dateLabel = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
 <ProjectLayout title={title} color={GRAY.resumes}>
 	<p class="post-date">{dateLabel}</p>
-	<ProjectBody overview={body} credits={[]} tags={[]} images={images} tintColor={GRAY.resumes} />
+	<ProjectBody credits={[]} tags={[]} images={images} tintColor={GRAY.resumes}>
+		<div class="prose" slot="info"><Content /></div>
+	</ProjectBody>
 </ProjectLayout>
 
 <style>
