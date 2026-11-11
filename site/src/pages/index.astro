@@ -4,7 +4,6 @@ import AppShell from '../layouts/AppShell.astro';
 import ProjectBar from '../components/ProjectBar.astro';
 import UtilityBar from '../components/UtilityBar.astro';
 import Marquee from '../components/Marquee.astro';
-import TagFilterOverlay from '../components/TagFilterOverlay.astro';
 import SearchBox from '../components/SearchBox.astro';
 import { projectColor, GRAY } from '../lib/colors';
 
@@ -17,7 +16,7 @@ const firstFour = ranked.slice(0, 4);
 const rest = ranked.slice(4);
 ---
 
-<AppShell title="averylawrence.com" showToggle={true}>
+<AppShell title="averylawrence.com">
 	{
 		firstFour.map(({ project, rank }) => (
 			<ProjectBar
@@ -55,5 +54,4 @@ const rest = ranked.slice(4);
 
 	<SearchBox />
 
-	<TagFilterOverlay slot="overlay" />
 </AppShell>

@@ -1,22 +1,19 @@
 ---
-interface Props {
-	showToggle?: boolean;
-}
-const { showToggle = false } = Astro.props;
+// Black bar on every page: wordmark (home link) and the + button that opens search and the tag filter.
 ---
 
 <header class="site-header">
 	<span></span>
 	<a href="/" class="wordmark">averylawrence.com</a>
-	{
-		showToggle ? (
-			<button id="tag-toggle" class="toggle-btn" aria-expanded="false" aria-controls="tag-overlay">
-				+
-			</button>
-		) : (
-			<span></span>
-		)
-	}
+	<button
+		id="menu-toggle"
+		class="toggle-btn"
+		aria-expanded="false"
+		aria-controls="menu-overlay"
+		aria-label="Open search and tag filter"
+	>
+		+
+	</button>
 </header>
 
 <style>

@@ -1,0 +1,217 @@
+---
+// The + menu in the header: site search on top, tag filter below.
+import SearchBox from './SearchBox.astro';
+
+const TAGS = ['Performance', 'Animation', 'Video', 'Installation', 'Photo'];
+---
+
+<div id="menu-overlay" class="menu-overlay">
+	<SearchBox variant="menu" />
+
+	<h2 class="menu-heading">filter by tag</h2>
+	<div class="tag-list">
+		{
+			TAGS.map((name) => (
+				<button class="tag-option" data-tag-option={name.toLowerCase()} aria-pressed="false">
+					{name}
+				</button>
+			))
+		}
+	</div>
+	<div id="filter-announce" class="sr-only" aria-live="polite"></div>
+</div>
+
+<style>
+	.menu-overlay {
+		position: absolute;
+		inset: 0;
+		background: rgb(255 255 255 / 85%);
+		backdrop-filter: blur(3px);
+		overflow-y: auto;
+		padding: 22px 20px 40px;
+		display: none;
+	}
+
+	.menu-overlay.open {
+		display: block;
+	}
+
+	.menu-heading {
+		text-align: center;
+		font-family: var(--font-heading);
+		font-weight: 500;
+		font-size: 21px;
+		margin: 28px 0 20px;
+	}
+
+	.tag-list {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.tag-option {
+		width: 100%;
+		background: var(--color-white);
+		color: var(--color-black);
+		border: 2px solid var(--color-black);
+		border-radius: var(--radius-sm);
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 16px;
+		padding: 16px;
+		cursor: pointer;
+	}
+
+	.tag-option.selected {
+		background: var(--color-black);
+		color: var(--color-white);
+	}
+</style>
+
+<script>
+	let escapeHandler: ((e: KeyboardEvent) => void) | null = null;
+
+	function initMenu() {
+		const toggleBtn = document.getElementById('menu-toggle');
+		const overlay = document.getElementById('menu-overlay');
+		if (!toggleBtn || !overlay) return;
+
+		const searchInput = overlay.querySelector<HTMLInputElement>('.search-input');
+		const tagButtons = overlay.querySelectorAll<HTMLButtonElement>('[data-tag-option]');
+		const announce = document.getElementById('filter-announce');
+
+		// Project bars only exist on the home page. Elsewhere, choosing a tag goes
+		// to the home page with that tag already applied.
+		const bars = document.querySelectorAll<HTMLElement>('[data-tags]');
+		const onHome = bars.length > 0;
+		const selected = new Set<string>(onHome ? new URLSearchParams(location.search).getAll('tag') : []);
+
+		function setOpen(open: boolean) {
+			overlay!.classList.toggle('open', open);
+			toggleBtn!.textContent = open ? '×' : '+';
+			toggleBtn!.setAttribute('aria-expanded', String(open));
+			toggleBtn!.setAttribute('aria-label', open ? 'Close search and tag filter' : 'Open search and tag filter');
+			if (open) searchInput?.focus();
+		}
+
+		function updateBars() {
+			let visibleCount = 0;
+			bars.forEach((bar) => {
+				const tags = bar.dataset.tags ? bar.dataset.tags.split(',').filter(Boolean) : [];
+				const show = selected.size === 0 || tags.some((t) => selected.has(t));
+				bar.style.display = show ? '' : 'none';
+				if (show) visibleCount += 1;
+			});
+			tagButtons.forEach((btn) => {
+				const on = selected.has(btn.dataset.tagOption ?? '');
+				btn.classList.toggle('selected', on);
+				btn.setAttribute('aria-pressed', String(on));
+			});
+			if (announce) {
+				announce.textContent =
+					selected.size === 0
+						? `Showing all ${visibleCount} projects.`
+						: `${visibleCount} ${visibleCount === 1 ? 'project matches' : 'projects match'} the selected tags.`;
+			}
+		}
+
+		toggleBtn.addEventListener('click', () => setOpen(!overlay.classList.contains('open')));
+
+		tagButtons.forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const tag = btn.dataset.tagOption;
+				if (!tag) return;
+				if (!onHome) {
+					location.assign(`/?tag=${encodeURIComponent(tag)}`);
+					return;
+				}
+				if (selected.has(tag)) selected.delete(tag);
+				else selected.add(tag);
+				updateBars();
+			});
+		});
+
+		if (escapeHandler) document.removeEventListener('keydown', escapeHandler);
+		escapeHandler = (e) => {
+			if (e.key === 'Escape' && overlay.classList.contains('open')) {
+				setOpen(false);
+				toggleBtn.focus();
+			}
+		};
+		document.addEventListener('keydown', escapeHandler);
+
+		if (selected.size > 0) updateBars();
+	}
+
+	document.addEventListener('astro:page-load', initMenu);
+</script>
+
+<!-- Search behavior for every [data-search] box on the page. Plain inline script on
+     purpose: bundling breaks the dynamic import of Pagefind (see project notes). -->
+<script is:inline>
+	(() => {
+		if (window.__awSearchReady) return;
+		window.__awSearchReady = true;
+
+		let pagefind;
+		async function loadPagefind() {
+			if (pagefind !== undefined) return pagefind;
+			try {
+				pagefind = await import('/pagefind/pagefind.js');
+				await pagefind?.init();
+			} catch {
+				pagefind = null;
+			}
+			return pagefind;
+		}
+
+		function bind(root) {
+			if (root.dataset.bound) return;
+			root.dataset.bound = 'true';
+			const input = root.querySelector('.search-input');
+			const results = root.querySelector('.search-results');
+			if (!input || !results) return;
+			let debounceTimer;
+
+			input.addEventListener('input', () => {
+				clearTimeout(debounceTimer);
+				debounceTimer = setTimeout(async () => {
+					const term = input.value.trim();
+					results.innerHTML = '';
+					if (!term) return;
+
+					const pf = await loadPagefind();
+					if (!pf) {
+						results.innerHTML = '<p class="search-note">Search is available on the deployed site.</p>';
+						return;
+					}
+
+					const search = await pf.search(term);
+					if (input.value.trim() !== term) return; // a newer search is already on its way
+					const data = await Promise.all(search.results.slice(0, 8).map((r) => r.data()));
+					if (data.length === 0) {
+						results.innerHTML = '<p class="search-note">No results.</p>';
+						return;
+					}
+
+					results.innerHTML = data
+						.map((d) => {
+							const title = (d.meta?.title ?? d.url).replace(/\s*—\s*averylawrence\.com$/, '');
+							return `
+						<a class="search-result" href="${d.url}">
+							<span class="search-result-title">${title}</span>
+							<span class="search-result-excerpt">${d.excerpt}</span>
+						</a>
+					`;
+						})
+						.join('');
+				}, 200);
+			});
+		}
+
+		document.addEventListener('astro:page-load', () => {
+			document.querySelectorAll('[data-search]').forEach(bind);
+		});
+	})();
+</script>
